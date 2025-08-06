@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ganesh Pratap Barade | Portfolio</title>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(rgba(5, 15, 25, 0.6), rgba(5, 15, 25, 0.6)),
+        url("images/IMG_20250530_001017_155.webp") no-repeat top center fixed;
+      background-size: cover;
+      background-position: 50% 10%;
+      background-repeat: no-repeat;
+      color: #fff;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: transparent;
+      padding: 20px 0;
+      text-align: center;
+    }
+
+    .nav-container {
+      max-width: 850px;
+      margin: 0 auto;
+    }
+
+    .navbar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 28px;
+    }
+
+    .navbar a {
+      color: #90e0ef;
+      text-decoration: none;
+      font-size: 0.95em;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .navbar a:hover,
+    .navbar a.active {
+      color: #fff;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    /* Container */
+    .container {
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 40px 20px 20px 20px;
+      background: rgba(17, 24, 39, 0.75);
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    header {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .profile-img {
+      width: 160px;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 5px solid #fff;
+      box-shadow: 0 6px 26px rgba(0, 0, 0, 0.25);
+      margin-bottom: 14px;
+      background: #fff;
+    }
+
+    h1 {
+      margin: 18px 0 8px 0;
+      font-size: 2.2em;
+    }
+
+    h2 {
+      color: #90e0ef;
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
+
+    .projects {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+      margin-bottom: 15px;
+    }
+
+    .project-card {
+      background: rgba(144, 224, 239, 0.09);
+      border-left: 5px solid #48cae4;
+      padding: 16px;
+      border-radius: 9px;
+      flex: 1 1 380px;
+      min-width: 320px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .project-card p {
+      margin-bottom: 12px;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .skills-list span {
+      background: #caf0f8;
+      color: #053661;
+      padding: 7px 18px;
+      border-radius: 12px;
+      font-size: 0.99em;
+      font-weight: 500;
+    }
+
+    .contact-list {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      margin-top: 10px;
+      background: rgba(72, 202, 228, 0.13);
+      padding: 18px 16px;
+      border-radius: 10px;
+      box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .contact-list a {
+      display: flex;
+      align-items: center;
+      background: #48cae4;
+      color: #023e8a;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 1.05em;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 7px rgba(0, 0, 0, 0.08);
+      transition: background 0.2s, color 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    .contact-list a:hover {
+      background: #0077b6;
+      color: #fff;
+    }
+
+    .contact-mobile {
+      background: #90e0ef;
+      color: #023e8a;
+    }
+    .contact-mobile:hover {
+      background: #0077b6;
+      color: #fff;
+    }
+
+    .contact-whatsapp {
+      background: #25D366;
+      color: white;
+    }
+    .contact-whatsapp:hover {
+      background: #128C7E;
+      color: white;
+    }
+
+    .contact-instagram {
+      background: #E1306C;
+      color: white;
+    }
+    .contact-instagram:hover {
+      background: #C13584;
+      color: white;
+    }
+
+    .cv-btn {
+      display: inline-block;
+      background: #48cae4;
+      color: #023e8a;
+      font-weight: 600;
+      padding: 10px 26px;
+      border-radius: 8px;
+      text-decoration: none;
+      margin-top: 18px;
+      transition: background 0.2s, color 0.2s;
+      border: none;
+      font-size: 1.05em;
+      box-shadow: 0 2px 7px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .cv-btn:hover {
+      background: #0077b6;
+      color: #fff;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px 0;
+      color: #90e0ef;
+      font-size: 0.95em;
+      margin-top: 40px;
+    }
+
+    footer p::after {
+      content: "";
+      display: block;
+      margin: 10px auto 0;
+      width: 60px;
+      height: 1px;
+      background-color: #48cae4;
+      opacity: 0.3;
+    }
+
+    section {
+      display: none;
+    }
+
+    section.active {
+      display: block;
+    }
+
+    section p {
+      text-align: justify;
+    }
+
+    @media (max-width: 900px) {
+      .project-card {
+        flex: 1 1 100%;
+        min-width: auto;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .profile-img {
+        width: 110px;
+        height: 110px;
+        margin-top: -60px;
+      }
+      .projects {
+        flex-direction: column;
+      }
+      .skills-list {
+        gap: 9px;
+      }
+      .contact-list {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      h1 {
+        font-size: 1.55em;
+      }
+    }
+    .certificates-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 12px;
+}
+
+.certificate-btn {
+  background: #48cae4;
+  color: #023e8a;
+  padding: 10px 22px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.05em;
+  box-shadow: 0 2px 7px rgba(0,0,0,0.08);
+  transition: background 0.3s, color 0.3s;
+  cursor: pointer;
+}
+
+.certificate-btn:hover {
+  background: #0077b6;
+  color: #fff;
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <ul>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#education" class="nav-link">Education</a></li>
+        <li><a href="#projects" class="nav-link">Projects</a></li>
+        <li><a href="#certifications" class="nav-link">Certifications</a></li>
+        <li><a href="#skills" class="nav-link">Skills</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="container">
+
+    <!-- Header -->
+    <header>
+      <img src="images/IMG_20250123_163848_resized.jpg" alt="Ganesh Barade" class="profile-img" />
+      <h1>Ganesh Pratap Barade</h1>
+      <p>B.Tech Computer Science & Engineering<br />Specialization: Artificial Intelligence & Analytics</p>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="active">
+      <h2>About Me</h2>
+      <p>
+        I am a technology enthusiast specializing in <b>Artificial Intelligence</b> & <b>Analytics</b>.
+        Motivated and detail-oriented Computer Engineering student with a solid foundation in web development (HTML, CSS) and programming (Java).
+        Well-versed in data structures, algorithms, OOP concepts, and SDLC. Recently developed an interest in Data Analytics,
+        gaining experience with Excel, SQL, and data visualization. I'm a strong problem solver with a passion for continuous learning,
+        eager to contribute to data-driven or software-oriented projects.
+      </p>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education">
+      <h2>Education</h2>
+      <p><b>B.Tech in Computer Science & Engineering</b><br />MIT ADT University, Pune | 2021–2025</p>
+      <p><b>B.H. Chate Junior College</b><br />Pune | 12th | Maharashtra State Board | 2020–2021</p>
+      <p><b>Pandit Jawaharlal Nehru Vidyalaya</b><br />Ravgoan | SSC | Maharashtra State Board | 2018–2019</p>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+      <h2>Projects</h2>
+      <div class="projects">
+        <div class="project-card">
+          <h3>Whatsapp Chat Analyzer</h3>
+          <p><strong>Python | Streamlit | Pandas | Matplotlib | Seaborn | NLP</strong><br />
+             A web app to visualize and analyze WhatsApp group chat data.<br />
+             Implemented preprocessing pipeline extracting users, timestamps, messages, links, emojis, and media.</p>
+          <a href="https://github.com/ganesh333-wq/whatsapp-chat-analysis-main" target="_blank" class="cv-btn">Show Project</a>
+        </div>
+
+        <div class="project-card">
+          <h3>Baliraja – Smart Agriculture Assistant</h3>
+          <p><strong>Flask | Python | PyTorch | Scikit-learn | ML/DL Integration</strong><br />
+             Built a Flask-based web app recommending crops, suggesting fertilizers, and diagnosing plant diseases using ML/DL.<br />
+             Trained on labeled plant image dataset like PlantVillage.</p>
+          <a href="https://github.com/ganesh333-wq/Agriculture-Portaln" target="_blank" class="cv-btn">Show Project</a>
+        </div>
+
+        <div class="project-card">
+          <h3>Bank Management System</h3>
+          <p><strong>Java | Swing | MySQL</strong><br />
+             Developed a desktop banking application with secure login, account creation, and transaction management.<br />
+             Included fund deposit, withdrawal, & balance inquiry modules using Java Swing and JDBC.</p>
+          <a href="https://github.com/ganesh333-wq/Bankmanagement-System" target="_blank" class="cv-btn">Show Project</a>
+        </div>
+
+       
+      </div>
+    </section>
+
+    <!-- Certifications Section -->
+ 
+    <section id="certifications">
+  <h2>Certifications</h2>
+  <div class="certificates-list">
+    <a href="certificates/GaneshBarade-SY_PCAP - Progra-certificate.pdf" target="_blank" class="certificate-btn">Programming Essentials in Python</a>
+
+    <a href="certificates/Full Stack Devlopment java.pdf" target="_blank" class="certificate-btn">Full Stack Development Java</a>
+
+    <a href="certificates/Data Modelling & visualisation TCS ion.pdf" target="_blank" class="certificate-btn">Data Modeling and Visualization</a>
+
+    <a href="/certificates/AWS_Academy_Graduate___AWS_Academy_Cloud_Foundations_Badge20240430-9-xms13e.pdf" target="_blank" class="certificate-btn">AWS Academy Cloud Foundations</a>
+  </div>
+</section>
+
+
+
+    <!-- Skills Section -->
+    <section id="skills">
+      <h2>Skills</h2>
+      <div class="skills-list">
+        <span>Python</span>
+        <span>Java</span>
+        <span>HTML</span>
+        <span>CSS</span>
+        <span>Postman</span>
+        <span>Data Analytics</span>
+        <span>Full Stack Development</span>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+      <h2>Contact</h2>
+      <div class="contact-list">
+        <a href="mailto:ganeshbarade2003@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/ganesh-barade-553872222/" target="_blank">LinkedIn</a>
+        <a href="https://github.com/ganesh333-wq?tab=repositories" target="_blank">GitHub</a>
+        <a href="tel:+911234567890" class="contact-mobile">📞 +91 7058956799</a>
+        <a href="https://wa.me/917058956799" target="_blank" rel="noopener" class="contact-whatsapp">💬 WhatsApp</a>
+        <a href="https://www.instagram.com/ganeshbarade_333" target="_blank" rel="noopener" class="contact-instagram">📸 Instagram</a>
+      </div>
+      <a href="certificates/GaneshBaradeResume (1).pdfs" download class="cv-btn">Download CV</a>
+    </section>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>Made with ❤️ by Ganesh</p>
+  </footer>
+
+  <script>
+    // Manage showing only selected section via navbar clicks
+    const navLinks = document.querySelectorAll('.navbar a.nav-link');
+    const sections = document.querySelectorAll('section');
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', evt => {
+        evt.preventDefault();
+        const targetId = link.getAttribute('href').substring(1);
+
+        // Hide all sections, remove active class from all
+        sections.forEach(sec => sec.classList.remove('active'));
+        navLinks.forEach(nav => nav.classList.remove('active'));
+
+        // Show selected section and highlight the nav link
+        const targetSection = document.getElementById(targetId);
+        if(targetSection) {
+          targetSection.classList.add('active');
+          link.classList.add('active');
+        }
+      });
+    });
+
+    // Initially show About section and highlight About nav link
+    window.addEventListener('DOMContentLoaded', () => {
+      sections.forEach((section, idx) => {
+        section.classList.toggle('active', idx === 0);
+      });
+      navLinks.forEach((link, idx) => {
+        link.classList.toggle('active', idx === 0);
+      });
+    });
+  </script>
+</body>
+</html>
