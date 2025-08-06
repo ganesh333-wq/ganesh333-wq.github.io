@@ -1,16 +1,12 @@
 # 🌐 ganesh-333wq.io
 
-![Website](https://ganesh-333wq.io)
-
 ## 📖 Table of Contents
 
 - [About](#about)
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Screenshots](#screenshots)
 - [Contributing](#contributing)
-- [License](#license)
 - [Contact](#contact)
 
 ## 📝 About
@@ -47,10 +43,6 @@ npm start
 
 Visit [https://ganesh-333wq.io](https://ganesh-333wq.io) to see the live website.
 
-## 🖼️ Screenshots
-
-![Homepage](https://your-image-url.com/homepage.png)
-![Projects Section](https://your-image-url.com/projects.png)
 
 ## 🤝 Contributing
 
