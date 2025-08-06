@@ -41,7 +41,7 @@ npm start
 
 ## 🚀 Usage
 
-Visit [https://ganesh-333wq.io](https://ganesh-333wq.io) to see the live website.
+Visit [https://ganesh-333wq.io](https://ganesh333-wq.github.io/) to see the live website.
 
 
 ## 🤝 Contributing
