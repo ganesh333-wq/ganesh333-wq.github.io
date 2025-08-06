@@ -1,10 +1,6 @@
 # 🌐 ganesh-333wq.io
 
-![Banner](https://your-image-url.com/banner.png)
-
-![Build Status](https://img.shields.io/github/actions/workflow/status/ganesh333-wq/ganesh-333wq.io/main.yml?branch=main)
-![License](https://img.shields.io/github/license/ganesh333-wq/ganesh-333wq.io)
-![Website](https://img.shields.io/website?url=https%3A%2F%2Fganesh-333wq.io)
+![Website](https://ganesh-333wq.io)
 
 ## 📖 Table of Contents
 
