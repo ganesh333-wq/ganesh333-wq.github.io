@@ -1,0 +1,16 @@
+export const skillsData = [
+  'Python',
+  'SQL',
+  'HTML',
+  'CSS',
+  'Git',
+  'Javascript',
+  'Tailwind',
+  'React',
+  'Excel',
+  'Power BI',
+  'Machine Learning',
+  'Deep Learning',
+  'Generative AI',
+  'Data Analytics',
+]
