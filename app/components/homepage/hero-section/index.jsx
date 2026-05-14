@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { personalData } from "@/utils/data/personal-data";
 import Link from "next/link";
-import { BsGithub, BsLinkedin } from "react-icons/bs";
+import { BsGithub, BsLinkedin, BsInstagram } from "react-icons/bs";
 import { MdDownload } from "react-icons/md";
 import { RiContactsFill } from "react-icons/ri";
 
@@ -20,10 +20,14 @@ function HeroSection() {
         <div className="order-2 lg:order-1 flex flex-col items-start justify-center p-2 pb-20 md:pb-10 lg:pt-10">
           <h1 className="text-3xl font-bold leading-10 text-white md:font-extrabold lg:text-[2.6rem] lg:leading-[3.5rem]">
             Hello, <br />
-            My Name is{" "}
+            My name is{" "}
             <span className=" text-pink-500">{personalData.name}</span>
-            {` , I'm a Professional `}
-            <span className=" text-[#16f2b3]">{personalData.designation}</span>.
+            {". "}
+            <br />
+            {"I specialize in "}
+            <span className=" text-[#16f2b3]">
+              Data Analytics, Generative AI, and Full-Stack Software Development
+            </span>.
           </h1>
 
           <div className="my-12 flex items-center gap-5">
@@ -40,6 +44,13 @@ function HeroSection() {
               className="transition-all text-pink-500 hover:scale-125 duration-300"
             >
               <BsLinkedin size={30} />
+            </Link>
+            <Link
+              href={personalData.instagram}
+              target="_blank"
+              className="transition-all text-pink-500 hover:scale-125 duration-300"
+            >
+              <BsInstagram size={30} />
             </Link>
           </div>
 
@@ -94,9 +105,9 @@ function HeroSection() {
               <div className="ml-4 lg:ml-8 mr-2">
                 <span className=" text-white">skills:</span>
                 <span className="text-gray-400">{`[`}</span><br />
-                <span><span className="text-pink-500">'Programming:</span><span className="text-amber-300"> Python (OOP), SQL (Joins, Window Functions), HTML, CSS'</span>,</span><br />
-                <span><span className="text-pink-500">'Tools:</span><span className="text-amber-300"> Excel, Power BI (DAX, Power Query), MySQL, Git, GitHub Copilot, Claude'</span>,</span><br />
-                <span><span className="text-pink-500">'Concepts:</span><span className="text-amber-300"> Data Cleaning, EDA, Data Visualization, KPI Analysis, Data Modeling, Machine Learning, Deep Learning, Object-Oriented Programming (OOP), Software Development Life Cycle (SDLC), Generative AI'</span></span><br />
+                <span><span className="text-pink-500">&apos;Programming:</span><span className="text-amber-300"> Python (OOP), SQL (Joins, Window Functions), HTML, CSS&apos;</span>,</span><br />
+                <span><span className="text-pink-500">&apos;Tools:</span><span className="text-amber-300"> Excel, Power BI (DAX, Power Query), MySQL, Git, GitHub Copilot, Claude&apos;</span>,</span><br />
+                <span><span className="text-pink-500">&apos;Concepts:</span><span className="text-amber-300"> Data Cleaning, EDA, Data Visualization, KPI Analysis, Data Modeling, Machine Learning, Deep Learning, Object-Oriented Programming (OOP), Software Development Life Cycle (SDLC), Generative AI&apos;</span></span><br />
                 <span className="text-gray-400">{`]`}</span>
               </div>
               <div>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Certificate Viewer</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0d1224;
+      color: #fff;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    .viewer-header {
+      align-items: center;
+      background: #11152c;
+      border-bottom: 1px solid rgba(144, 224, 239, 0.22);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 24px;
+    }
+
+    h1 {
+      font-size: 1.15rem;
+      margin: 0;
+    }
+
+    a {
+      color: #16f2b3;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .certificate-wrap {
+      align-items: center;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      min-height: calc(100vh - 66px);
+      padding: 24px;
+    }
+
+    img {
+      max-height: calc(100vh - 114px);
+      max-width: 100%;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+  <div class="viewer-header">
+    <h1 id="certificate-title">Certificate</h1>
+    <a href="index.html#certifications">Back</a>
+  </div>
+  <div class="certificate-wrap">
+    <img id="certificate-image" alt="Certificate preview" />
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const image = params.get("image") || "";
+    const title = params.get("title") || "Certificate";
+    const isCertificateImage = image.startsWith("certification/previews/") && image.endsWith(".png");
+
+    document.title = title;
+    document.getElementById("certificate-title").textContent = title;
+
+    if (isCertificateImage) {
+      document.getElementById("certificate-image").src = image;
+    } else {
+      document.body.innerHTML = "<p style='padding:24px'>Certificate not found.</p>";
+    }
+  </script>
+</body>
+</html>

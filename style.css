@@ -241,28 +241,76 @@ section p {
 
 /* Certificates */
 .certificates-list {
+  margin-top: 12px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.certificates-track {
   display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
+  gap: 48px;
+  width: max-content;
+  animation: certificate-scroll 42s linear infinite;
+}
+
+.certificates-list:hover .certificates-track {
+  animation-play-state: paused;
+}
+
+@keyframes certificate-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.certificates-track .certificate-btn {
+  flex: 0 0 auto;
+  width: 320px;
+  height: 360px;
   margin-top: 12px;
 }
 
 .certificate-btn {
-  background: #48cae4;
-  color: #023e8a;
-  padding: 10px 22px;
+  background: rgba(144, 224, 239, 0.09);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  padding: 0 0 14px 0;
   border-radius: 8px;
   text-decoration: none;
   font-weight: 600;
-  font-size: 1.05em;
+  font-size: 0.95em;
   box-shadow: 0 2px 7px rgba(0,0,0,0.08);
-  transition: background 0.3s, color 0.3s;
+  transition: background 0.3s, color 0.3s, transform 0.3s;
   cursor: pointer;
+  border: 1px solid rgba(144, 224, 239, 0.22);
 }
 
 .certificate-btn:hover {
-  background: #0077b6;
+  background: rgba(72, 202, 228, 0.22);
   color: #fff;
+  transform: translateY(-3px);
+}
+
+.certificate-btn img {
+  width: 100%;
+  height: 220px;
+  background: #fff;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+.certificate-btn span {
+  display: block;
+  padding: 0 14px;
+  line-height: 1.35;
+  min-height: 52px;
 }
 
 /* Skills Falling Animation */

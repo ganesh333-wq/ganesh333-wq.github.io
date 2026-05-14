@@ -27,9 +27,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" />
-        <link rel="shortcut icon" href="/favicon.png" />
-        <link rel="apple-touch-icon" href="/favicon.png" />
+        <link rel="icon" type="image/png" href="/favicon.png" />
+        <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/favicon.png" type="image/png" />
       </head>
       <body className={inter.className}>
         <ToastContainer />

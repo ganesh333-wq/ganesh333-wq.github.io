@@ -1,20 +1,23 @@
 "use client";
 
-import Lottie from "lottie-react";
+import { useEffect, useState } from "react";
 
 const AnimationLottie = ({ animationPath, width }) => {
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: animationPath,
-    style: {
-      width: '95%',
-    }
-  };
+  const [LottieComp, setLottieComp] = useState(null);
 
-  return (
-    <Lottie {...defaultOptions} />
-  );
+  useEffect(() => {
+    let mounted = true;
+    import("lottie-react").then((mod) => {
+      if (mounted) setLottieComp(() => mod.default);
+    });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  if (!LottieComp) return null;
+
+  return <LottieComp loop autoplay animationData={animationPath} style={{ width: width || "95%" }} />;
 };
 
 export default AnimationLottie;

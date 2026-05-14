@@ -10,5 +10,11 @@ export const educations = [
     title: "Higher Secondary Certificate (HSC) – Science",
     duration: "Completed: February 2021",
     institution: "B.H. Chate Junior College, Pune",
+  },
+  {
+    id: 3,
+    title: "Secondary School Certificate (SSC)",
+    duration: "Completed: March 2019",
+    institution: "P.J.N Highschool, Ravgaon",
   }
 ]
