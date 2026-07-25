@@ -3,6 +3,7 @@ import Image from "next/image";
 import { BsPersonWorkspace } from "react-icons/bs";
 import AnimationLottie from "../../helper/animation-lottie";
 import GlowCard from "../../helper/glow-card";
+import TimelineList from "../../helper/timeline-list";
 import experience from '/public/lottie/code.json';
 
 function Experience() {
@@ -27,7 +28,7 @@ function Experience() {
       </div>
 
       <div className="py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-[0.8fr_1.2fr] gap-8 lg:gap-16">
           <div className="flex justify-center items-start">
             <div className="w-full h-full">
               <AnimationLottie animationPath={experience} />
@@ -35,10 +36,12 @@ function Experience() {
           </div>
 
           <div>
-            <div className="flex flex-col gap-6">
+            <TimelineList>
               {
                 experiences.map(experience => (
-                  <GlowCard key={experience.id} identifier={`experience-${experience.id}`}>
+                  <div className="timeline-item" key={experience.id}>
+                    <span className="timeline-node" aria-hidden="true"></span>
+                    <GlowCard identifier={`experience-${experience.id}`}>
                     <div className="p-3 relative">
                       <Image
                         src="/blur-23.svg"
@@ -47,29 +50,41 @@ function Experience() {
                         height={200}
                         className="absolute bottom-0 opacity-80"
                       />
-                      <div className="flex justify-center">
-                        <p className="text-xs sm:text-sm text-[#16f2b3]">
-                          {experience.duration}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-x-8 px-3 py-5">
+                      <div className="flex min-h-[140px] items-center gap-x-4 px-3 py-8 sm:gap-x-6 lg:min-h-[160px]">
                         <div className="text-violet-500  transition-all duration-300 hover:scale-125">
-                          <BsPersonWorkspace size={36} />
+                          {
+                            experience.logo ? (
+                              <Image
+                                src={experience.logo}
+                                alt={`${experience.company} logo`}
+                                width={180}
+                                height={54}
+                                className="h-12 w-36 shrink-0 object-contain sm:h-14 sm:w-44"
+                              />
+                            ) : (
+                              <BsPersonWorkspace size={36} />
+                            )
+                          }
                         </div>
-                        <div>
-                          <p className="text-base sm:text-xl mb-2 font-medium uppercase">
+                        <div className="min-w-0 flex-1">
+                          <p className="mb-2 whitespace-nowrap text-[clamp(0.78rem,1.7vw,1.15rem)] font-medium uppercase leading-tight">
                             {experience.title}
                           </p>
-                          <p className="text-sm sm:text-base">
-                            {experience.company}
-                          </p>
+                          <div className="flex items-center gap-x-2 whitespace-nowrap text-[clamp(0.72rem,1.45vw,1rem)]">
+                            <p className="text-xs sm:text-sm text-[#16f2b3]">
+                              {experience.duration}
+                            </p>
+                            <span className="text-[#16f2b3]">•</span>
+                            <p>{experience.company}</p>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </GlowCard>
+                    </GlowCard>
+                  </div>
                 ))
               }
-            </div>
+            </TimelineList>
           </div>
         </div>
       </div>

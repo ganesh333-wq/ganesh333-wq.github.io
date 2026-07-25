@@ -3,6 +3,7 @@ import { educations } from "@/utils/data/educations";
 import { BsPersonWorkspace } from "react-icons/bs";
 import AnimationLottie from "../../helper/animation-lottie";
 import GlowCard from "../../helper/glow-card";
+import TimelineList from "../../helper/timeline-list";
 import lottieFile from '/public/lottie/study.json';
 
 function Education() {
@@ -40,10 +41,12 @@ function Education() {
           </div>
 
           <div>
-            <div className="flex flex-col gap-6">
+            <TimelineList>
               {
                 educations.map(education => (
-                  <GlowCard key={education.id} identifier={`education-${education.id}`}>
+                  <div className="timeline-item" key={education.id}>
+                    <span className="timeline-node" aria-hidden="true"></span>
+                    <GlowCard identifier={`education-${education.id}`}>
                     <div className="p-3 relative text-white">
                       <Image
                         src="/blur-23.svg"
@@ -69,10 +72,11 @@ function Education() {
                         </div>
                       </div>
                     </div>
-                  </GlowCard>
+                    </GlowCard>
+                  </div>
                 ))
               }
-            </div>
+            </TimelineList>
           </div>
         </div>
       </div>
