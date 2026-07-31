@@ -1,0 +1,159 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: rgb(211, 216, 232);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background-color: #0d1224;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Base Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d1224;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1a1443;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #25213b;
+}
+
+/* Glassmorphism Utilities (Adapted to Original Theme) */
+.glass-panel {
+  background: rgba(13, 18, 36, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-card {
+  background: linear-gradient(145deg, rgba(26, 20, 67, 0.4) 0%, rgba(13, 18, 36, 0.4) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Timeline styles */
+#sticky-card-1 { --index: 1; }
+#sticky-card-2 { --index: 2; }
+#sticky-card-3 { --index: 3; }
+#sticky-card-4 { --index: 4; }
+
+.sticky-card {
+  top: calc(var(--index) * 4rem);
+}
+
+.portfolio-timeline {
+  --timeline-progress: 0;
+  position: relative;
+  padding-left: 2rem;
+}
+
+.portfolio-timeline::before,
+.portfolio-timeline::after {
+  content: "";
+  position: absolute;
+  left: 0.5rem;
+  top: 0.75rem;
+  bottom: 0.75rem;
+  width: 2px;
+  border-radius: 999px;
+}
+
+.portfolio-timeline::before {
+  background: rgba(132, 115, 140, 0.22);
+}
+
+.portfolio-timeline::after {
+  background: linear-gradient(180deg, #16f2b3 0%, #8228ec 100%);
+  box-shadow: 0 0 18px rgba(22, 242, 179, 0.32);
+  transform: scaleY(var(--timeline-progress));
+  transform-origin: top;
+  will-change: transform;
+}
+
+.timeline-item {
+  position: relative;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 700ms ease, transform 700ms ease;
+  will-change: opacity, transform;
+}
+
+.timeline-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.timeline-node {
+  position: absolute;
+  left: -1.94rem;
+  top: 1.75rem;
+  z-index: 1;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(132, 115, 140, 0.7);
+  border-radius: 999px;
+  background: #0d1224;
+  transition: background-color 500ms ease, border-color 500ms ease, box-shadow 500ms ease, transform 500ms ease;
+}
+
+.timeline-item.is-node-active .timeline-node {
+  border-color: #16f2b3;
+  background: #16f2b3;
+  box-shadow: 0 0 0 6px rgba(22, 242, 179, 0.12), 0 0 22px rgba(22, 242, 179, 0.52);
+  transform: scale(1.08);
+}
+
+@media (max-width: 640px) {
+  .portfolio-timeline {
+    padding-left: 1.5rem;
+  }
+  .portfolio-timeline::before,
+  .portfolio-timeline::after {
+    left: 0.25rem;
+  }
+  .timeline-node {
+    left: -1.69rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-timeline::after,
+  .timeline-item,
+  .timeline-node {
+    transition: none;
+  }
+  .timeline-item {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Blinking cursor effect for hero terminal */
+.blink {
+  animation: blinker 1s linear infinite;
+}
+@keyframes blinker {
+  50% { opacity: 0; }
+}
