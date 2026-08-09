@@ -35,12 +35,12 @@ function Certifications() {
           direction="left"
         >
           {certifications.map((certificate) => (
-            <div key={certificate.id} className="px-6 py-2 sm:px-10">
+            <div key={certificate.id} className="px-3 sm:px-6 py-2 md:px-10">
               <Link
                 to={`/certifications/${certificate.slug}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block h-[25rem] w-80 rounded-xl group relative hover:scale-[1.03] transition-all duration-500 sm:h-[30rem] sm:w-[32rem]"
+                className="block h-[25rem] w-[260px] sm:w-80 rounded-xl group relative hover:scale-[1.03] transition-all duration-500 sm:h-[30rem] lg:w-[32rem]"
                 aria-label={`Open ${certificate.title} certificate`}
               >
                 <div className="flex h-full w-full flex-col overflow-hidden rounded-xl border border-white/10 glass-panel group-hover:border-violet-500 transition-all duration-500 group-hover:shadow-[0_0_20px_rgba(139,92,246,0.3)]">

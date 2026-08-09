@@ -33,9 +33,9 @@ function ContactForm() {
       setError({ ...error, required: false });
     }
 
-    const serviceID = "service_nbxhsvg";
-    const templateID = "template_ra2b0es";
-    const options = { publicKey: "hk7bjDtn5sTjH7T7J" };
+    const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const options = { publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY };
 
     try {
       const res = await emailjs.send(
