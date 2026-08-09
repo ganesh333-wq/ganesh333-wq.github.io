@@ -70,7 +70,7 @@ function Experience() {
                                 alt={`${experience.company} logo`}
                                 width={180}
                                 height={54}
-                                className="h-12 w-36 shrink-0 object-contain sm:h-14 sm:w-44"
+                                className="h-10 w-28 shrink-0 object-contain sm:h-12 sm:w-36 lg:h-14 lg:w-44"
                               />
                             ) : (
                               <BsPersonWorkspace size={36} />

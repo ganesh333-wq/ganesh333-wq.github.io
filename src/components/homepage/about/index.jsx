@@ -10,6 +10,17 @@ function AboutSection() {
         </span>
         <span className="h-36 w-[2px] bg-gradient-to-b from-transparent via-violet-500 to-transparent opacity-30 mt-8"></span>
       </div>
+
+      <div className="flex justify-center my-5 lg:hidden">
+        <div className="flex items-center">
+          <span className="w-12 sm:w-24 h-[2px] bg-gradient-to-r from-transparent to-violet-500/50"></span>
+          <span className="bg-[#1a1443] border border-white/10 w-fit text-white p-2 px-5 text-xl rounded-md shadow-glass tracking-widest uppercase text-sm font-medium">
+            About Me
+          </span>
+          <span className="w-12 sm:w-24 h-[2px] bg-gradient-to-l from-transparent to-violet-500/50"></span>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
         <motion.div 
           initial={{ opacity: 0, x: -50 }}
@@ -39,7 +50,7 @@ function AboutSection() {
               width={280}
               height={280}
               alt="Ganesh Pratap Barade"
-              className="relative rounded-lg transition-all duration-1000 grayscale group-hover:grayscale-0 group-hover:scale-[1.02] cursor-pointer object-cover"
+              className="relative rounded-lg transition-all duration-1000 grayscale group-hover:grayscale-0 group-hover:scale-[1.02] cursor-pointer object-cover max-w-full h-auto w-[240px] sm:w-[280px]"
             />
           </div>
         </motion.div>

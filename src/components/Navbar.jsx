@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { IoMdMenu, IoMdClose } from "react-icons/io";
 
 const NAV_ITEMS = [
   { id: "about", label: "ABOUT" },
@@ -16,6 +17,7 @@ const NAVBAR_OFFSET = 80;
 
 function Navbar() {
   const [activeSection, setActiveSection] = useState("");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [underlineStyle, setUnderlineStyle] = useState({ left: 0, width: 0 });
   const navListRef = useRef(null);
   const linkRefs = useRef({});
@@ -145,6 +147,7 @@ function Navbar() {
 
     event.preventDefault();
     setActiveSection(id);
+    setIsMobileMenuOpen(false); // Close menu on click
 
     const sectionTop = section.getBoundingClientRect().top + window.scrollY;
 
@@ -173,7 +176,19 @@ function Navbar() {
               </a>
             </div>
 
-            <ul className="relative mt-4 flex h-screen max-h-0 w-full flex-col items-start text-sm opacity-0 md:mt-0 md:h-auto md:max-h-screen md:w-auto md:flex-row md:space-x-1 md:border-0 md:opacity-100" id="navbar-default" ref={navListRef}>
+            <button
+              className="md:hidden text-gray-300 hover:text-[#16f2b3] focus:outline-none transition-colors duration-300"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? <IoMdClose size={30} /> : <IoMdMenu size={30} />}
+            </button>
+
+            <ul 
+              className={`absolute top-full left-0 right-0 bg-[#0d1224]/95 backdrop-blur-xl border-b border-white/5 md:border-none md:bg-transparent md:backdrop-blur-none md:relative md:flex md:flex-row md:items-center md:h-auto md:w-auto md:space-x-1 md:opacity-100 transition-all duration-300 ease-in-out origin-top flex-col ${isMobileMenuOpen ? 'flex max-h-screen opacity-100 py-4' : 'hidden md:flex max-h-0 opacity-0 md:max-h-screen'} overflow-hidden md:overflow-visible`} 
+              id="navbar-default" 
+              ref={navListRef}
+            >
               {NAV_LINK_ITEMS.map((item) => (
                 <li key={item.id}>
                   <a
@@ -196,6 +211,15 @@ function Navbar() {
                   opacity: underlineStyle.width ? 1 : 0,
                 }}
               />
+              <li className="md:hidden mt-2 px-4 w-full">
+                <a
+                  className="block w-full text-center rounded-full bg-[#1a1443] border border-violet-600/30 px-5 py-2 text-sm font-medium text-white no-underline outline-none shadow-[0_0_20px_rgba(124,58,237,0.3)] transition-all duration-300 hover:bg-violet-600 hover:border-transparent"
+                  href="/#contact"
+                  onClick={(event) => handleNavClick(event, "contact")}
+                >
+                  CONTACT
+                </a>
+              </li>
             </ul>
             <a
               className="ml-4 hidden rounded-full bg-[#1a1443] border border-violet-600/30 px-5 py-2 text-sm font-medium text-white no-underline outline-none shadow-[0_0_20px_rgba(124,58,237,0.3)] transition-all duration-300 hover:bg-violet-600 hover:border-transparent hover:text-white md:block"
