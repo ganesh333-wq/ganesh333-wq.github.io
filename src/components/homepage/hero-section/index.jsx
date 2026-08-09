@@ -89,7 +89,7 @@ function HeroSection() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="order-1 lg:order-2 from-[#0d1224] border-white/10 relative rounded-xl border bg-gradient-to-r to-[#0a0d37] shadow-glass min-w-0 max-w-full"
+          className="order-1 lg:order-2 from-[#0d1224] border-white/10 relative rounded-xl border bg-gradient-to-r to-[#0a0d37] shadow-glass min-w-0 max-w-full overflow-hidden"
         >
           <div className="flex flex-row">
             <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-pink-500 to-violet-600 opacity-50"></div>
@@ -103,7 +103,7 @@ function HeroSection() {
             </div>
           </div>
           <div className="overflow-x-auto px-4 lg:px-8 py-4 lg:py-8 w-full">
-            <code className="font-mono text-[0.65rem] sm:text-xs md:text-sm lg:text-base whitespace-pre md:whitespace-normal block min-w-max md:min-w-0">
+            <code className="font-mono text-[0.65rem] sm:text-xs md:text-sm lg:text-base whitespace-pre md:whitespace-normal block min-w-0">
               <div className="blink">
                 <span className="mr-2 text-pink-500">const</span>
                 <span className="mr-2 text-white">coder</span>
