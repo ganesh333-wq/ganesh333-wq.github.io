@@ -59,7 +59,7 @@ function Experience() {
                         alt="Hero"
                         width={1080}
                         height={200}
-                        className="absolute bottom-0 opacity-40 mix-blend-screen"
+                        className="absolute bottom-0 opacity-40 mix-blend-screen w-full"
                       />
                       <div className="flex min-h-[140px] items-center gap-x-4 px-3 py-8 sm:gap-x-6 lg:min-h-[160px]">
                         <div className="text-violet-500 transition-all duration-300 hover:scale-125">
@@ -78,10 +78,10 @@ function Experience() {
                           }
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="mb-2 whitespace-nowrap text-[clamp(0.78rem,1.7vw,1.15rem)] font-medium uppercase leading-tight text-white">
+                          <p className="mb-2 text-[clamp(0.78rem,1.7vw,1.15rem)] font-medium uppercase leading-tight text-white">
                             {experience.title}
                           </p>
-                          <div className="flex items-center gap-x-2 whitespace-nowrap text-[clamp(0.72rem,1.45vw,1rem)]">
+                          <div className="flex flex-wrap items-center gap-x-2 text-[clamp(0.72rem,1.45vw,1rem)]">
                             <p className="text-xs sm:text-sm text-[#16f2b3]">
                               {experience.duration}
                             </p>
