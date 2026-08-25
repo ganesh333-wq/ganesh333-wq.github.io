@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 
 function Certifications() {
   return (
-    <div id="certifications" className="relative z-50 border-t my-12 lg:my-24 border-white/5 pt-12">
+    <div id="certifications" className="relative z-50 border-t my-12 lg:my-24 border-white/5 pt-12 section-viewport overflow-x-hidden">
       <div className="flex justify-center my-5 lg:py-8">
         <div className="flex items-center">
           <span className="w-24 h-[2px] bg-gradient-to-r from-transparent to-violet-500/50"></span>

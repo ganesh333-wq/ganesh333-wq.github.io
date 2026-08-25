@@ -4,6 +4,8 @@
 
 :root {
   --foreground-rgb: rgb(211, 216, 232);
+  /* Matches Navbar's fixed height + its layout spacer (h-20) and NAVBAR_OFFSET in Navbar.jsx */
+  --navbar-height: 5rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -148,6 +150,21 @@ body {
     opacity: 1;
     transform: none;
   }
+}
+
+/* One major section = one viewport (below the fixed navbar), without cropping
+   content that genuinely needs more room. min-height only — never max-height. */
+.section-viewport-height {
+  min-height: calc(100vh - var(--navbar-height));
+  min-height: calc(100dvh - var(--navbar-height));
+}
+
+.section-viewport {
+  min-height: calc(100vh - var(--navbar-height));
+  min-height: calc(100dvh - var(--navbar-height));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* Blinking cursor effect for hero terminal */

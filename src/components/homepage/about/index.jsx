@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 function AboutSection() {
   return (
-    <div id="about" className="my-12 lg:my-16 relative">
+    <div id="about" className="my-12 lg:my-16 relative section-viewport overflow-x-hidden">
       <div className="hidden lg:flex flex-col items-center absolute top-16 -right-8">
         <span className="bg-[#1a1443] border border-white/10 w-fit text-white rotate-90 p-2 px-5 text-xl rounded-md shadow-glass">
           ABOUT ME

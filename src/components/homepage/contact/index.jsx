@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 
 function ContactSection() {
   return (
-    <div id="contact" className="my-12 lg:my-16 relative mt-24 text-white">
+    <div id="contact" className="my-12 lg:my-16 relative mt-24 text-white section-viewport overflow-x-hidden">
       <div className="hidden lg:flex flex-col items-center absolute top-24 -right-8">
         <span className="bg-[#1a1443] border border-white/10 w-fit text-gray-300 rotate-90 p-2 px-5 text-xl rounded-md shadow-glass">
           CONTACT
