@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 
 function Education() {
   return (
-    <div id="education" className="relative z-50 border-t my-12 lg:my-24 border-white/5 pt-12">
+    <div id="education" className="relative z-50 border-t my-12 lg:my-24 border-white/5 pt-12 section-viewport overflow-x-hidden">
       <img
         src="/section.svg"
         alt="Hero"

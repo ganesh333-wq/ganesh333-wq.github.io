@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 function Skills() {
   return (
-    <div id="skills" className="relative z-50 border-t my-12 lg:my-24 border-white/5">
+    <div id="skills" className="relative z-50 border-t my-12 lg:my-24 border-white/5 section-viewport overflow-x-hidden">
       <div className="w-[100px] h-[100px] bg-violet-500 rounded-full absolute top-6 left-[42%] translate-x-1/2 filter blur-3xl opacity-20"></div>
 
       <div className="flex justify-center -translate-y-[1px]">
