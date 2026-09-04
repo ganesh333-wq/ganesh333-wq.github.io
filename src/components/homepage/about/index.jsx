@@ -21,13 +21,13 @@ function AboutSection() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-[1.8fr_1fr] gap-6 items-center">
         <motion.div 
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8 }}
-          className="order-2 lg:order-1 glass-card p-8 lg:p-12 rounded-2xl"
+          className="order-2 lg:order-1 w-full glass-card pt-8 pr-8 pb-8 pl-4 lg:pt-12 lg:pr-12 lg:pb-12 lg:pl-6 rounded-2xl"
         >
           <p className="font-medium mb-5 text-[#16f2b3] text-xl uppercase tracking-widest">
             Who I am
@@ -41,7 +41,7 @@ function AboutSection() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex justify-center order-1 lg:order-2"
+          className="flex justify-center lg:justify-start order-1 lg:order-2"
         >
           <div className="relative group">
             <div className="absolute -inset-1 bg-gradient-to-r from-violet-500 to-pink-500 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>

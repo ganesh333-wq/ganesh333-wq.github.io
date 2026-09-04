@@ -81,13 +81,10 @@ function Experience() {
                           <p className="mb-2 text-[clamp(0.78rem,1.7vw,1.15rem)] font-medium uppercase leading-tight text-white">
                             {experience.title}
                           </p>
-                          <div className="flex flex-wrap items-center gap-x-2 text-[clamp(0.72rem,1.45vw,1rem)]">
-                            <p className="text-xs sm:text-sm text-[#16f2b3]">
+                          <p className="text-xs sm:text-sm text-[#16f2b3]">
                               {experience.duration}
                             </p>
-                            <span className="text-[#16f2b3]">•</span>
-                            <p className="text-gray-300">{experience.company}</p>
-                          </div>
+                            <p className="mt-1 text-lg sm:text-xl text-gray-300">{experience.company}</p>
                         </div>
                       </div>
                     </div>
