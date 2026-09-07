@@ -1,325 +1,125 @@
-import { useRef, useState, useCallback, useEffect } from "react";
 import { personalData } from "@/utils/data/personal-data";
 import { BsGithub, BsLinkedin, BsInstagram } from "react-icons/bs";
 import { MdDownload } from "react-icons/md";
 import { RiContactsFill } from "react-icons/ri";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import { EASE_PREMIUM } from "@/utils/motion";
 
-// Crossfade window between video 1 and video 2
-const TRANSITION_MS = 320;
+// The hero is a stage for the particle galaxy drawn by <ParticleField />, a
+// fixed full-viewport canvas mounted once in App behind the page. Nothing in
+// here draws the galaxy — the layout's only job is to leave it room.
+//
+// Composition: a tracked role label pinned to the top, a deliberately empty
+// middle band where the galaxy's core sits, and the title block anchored low,
+// with a scroll cue at the very bottom.
+
+const SOCIAL_LINKS = [
+  { href: personalData.github, Icon: BsGithub, label: "GitHub" },
+  { href: personalData.linkedIn, Icon: BsLinkedin, label: "LinkedIn" },
+  { href: personalData.instagram, Icon: BsInstagram, label: "Instagram" },
+];
+
+// One shared parent so the label, title, tagline and actions arrive as a
+// single considered movement rather than several independent animations.
+const BLOCK = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.15, delayChildren: 4.0 } },
+};
+
+const RISE = {
+  hidden: { opacity: 0, y: 26, filter: "blur(10px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 1.1, ease: EASE_PREMIUM },
+  },
+};
 
 function HeroSection() {
-  const sectionRef = useRef(null);
-  const video1Ref = useRef(null);
-  const video2Ref = useRef(null);
-  const [isMuted, setIsMuted] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isSecondActive, setIsSecondActive] = useState(false);
-  // Shown only when the browser actually blocks autoplay-with-sound
-  const [showSoundPrompt, setShowSoundPrompt] = useState(false);
-
-  // Unmute both videos and dismiss the prompt on user gesture (also
-  // resumes playback if the browser had blocked the muted fallback)
-  const handleUnmute = useCallback((e) => {
-    if (e) e.stopPropagation();
-    const v1 = video1Ref.current;
-    const v2 = video2Ref.current;
-    if (v1) {
-      v1.muted = false;
-      v1.volume = 1;
-      if (v1.paused && !isSecondActive) {
-        const p = v1.play();
-        if (p && p.catch) p.catch(() => {});
-      }
-    }
-    if (v2) {
-      v2.muted = false;
-      v2.volume = 1;
-      if (v2.paused && isSecondActive) {
-        const p = v2.play();
-        if (p && p.catch) p.catch(() => {});
-      }
-    }
-    setIsMuted(false);
-    setShowSoundPrompt(false);
-  }, [isSecondActive]);
-
-  const toggleMute = useCallback((e) => {
-    if (e) e.stopPropagation();
-    const v1 = video1Ref.current;
-    const v2 = video2Ref.current;
-    if (!v1 || !v2) return;
-    const next = !v1.muted;
-    v1.muted = next;
-    v2.muted = next;
-    setIsMuted(next);
-  }, []);
-
-  // video 1 finished → crossfade into video 2
-  const handleFirstEnded = useCallback(() => {
-    const v1 = video1Ref.current;
-    const v2 = video2Ref.current;
-    if (!v2) return;
-    v2.currentTime = 0;
-    v2.muted = v1 ? v1.muted : false;
-    v2.volume = v1 ? v1.volume : 1;
-    const p = v2.play();
-    if (p && p.catch) p.catch(() => {});
-    setIsSecondActive(true);
-  }, []);
-
-  // video 2 finished → loop back into video 1, continuously
-  const handleSecondEnded = useCallback(() => {
-    const v1 = video1Ref.current;
-    const v2 = video2Ref.current;
-    if (!v1) return;
-    v1.currentTime = 0;
-    v1.muted = v2 ? v2.muted : false;
-    v1.volume = v2 ? v2.volume : 1;
-    const p = v1.play();
-    if (p && p.catch) p.catch(() => {});
-    setIsSecondActive(false);
-  }, []);
-
-  // Auto-play with sound as soon as the section enters the viewport.
-  // Browsers may block unmuted autoplay before the user has interacted
-  // with the page, so we retry muted and surface a "play with sound"
-  // prompt rather than silently forcing mute on every visit.
-  useEffect(() => {
-    const node = sectionRef.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const v1 = video1Ref.current;
-          const v2 = video2Ref.current;
-          if (!v1 || !v2) return;
-
-          if (entry.isIntersecting) {
-            v2.pause();
-            v2.currentTime = 0;
-            v1.currentTime = 0;
-            setIsSecondActive(false);
-
-            v1.volume = 0.8;
-            v1.muted = false;
-            const playPromise = v1.play();
-
-            if (playPromise && playPromise.then) {
-              playPromise
-                .then(() => {
-                  setIsMuted(false);
-                  setShowSoundPrompt(false);
-                })
-                .catch(() => {
-                  // Autoplay-with-sound was blocked: fall back to a
-                  // muted autoplay and ask the user to opt into sound.
-                  v1.muted = true;
-                  setIsMuted(true);
-                  setShowSoundPrompt(true);
-                  const retry = v1.play();
-                  if (retry && retry.catch) retry.catch(() => {});
-                });
-            } else {
-              setIsMuted(false);
-              setShowSoundPrompt(false);
-            }
-          } else {
-            v1.pause();
-            v2.pause();
-            v1.currentTime = 0;
-            v2.currentTime = 0;
-            setIsSecondActive(false);
-            setIsPlaying(false);
-            setShowSoundPrompt(false);
-          }
-        });
-      },
-      { threshold: 0.3 }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <motion.section
-      ref={sectionRef}
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.2 }}
-      className="relative flex flex-col items-center justify-between py-4 lg:py-12 section-viewport-height"
+      id="hero"
+      variants={BLOCK}
+      initial="hidden"
+      animate="visible"
+      className="relative flex flex-col items-center justify-between text-center section-viewport-height py-8 lg:py-12"
     >
-      <div className="absolute inset-0 bg-dot-pattern -z-10 opacity-30"></div>
-      <img
-        src="/hero.svg"
-        alt="Hero"
-        width={1572}
-        height={795}
-        className="absolute -top-[98px] -z-10 opacity-30 mix-blend-screen"
-      />
 
-      <div className="grid grid-cols-1 items-start lg:items-center lg:grid-cols-2 lg:gap-12 gap-y-8 w-full">
-        <div className="order-2 lg:order-1 flex flex-col items-start justify-center p-2 pb-20 md:pb-10 lg:pt-10">
-          <h1 className="text-3xl font-bold leading-10 text-white md:font-extrabold lg:text-[2.6rem] lg:leading-[3.5rem]">
-            Hello, <br />
-            My name is{" "}
-            <span className="text-pink-500">{personalData.name}</span>
-            {". "}
-            <br />
-            {"I specialize in "}
-            <span className="text-[#16f2b3]">
-              Data Analytics, Generative AI, and Full-Stack Software Development
-            </span>.
-          </h1>
 
-          <div className="my-12 flex items-center gap-5">
-            <a
-              href={personalData.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-all text-gray-400 hover:text-pink-500 hover:scale-125 duration-300 hover:drop-shadow-[0_0_8px_rgba(236,72,153,0.5)]"
-            >
-              <BsGithub size={30} />
-            </a>
-            <a
-              href={personalData.linkedIn}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-all text-gray-400 hover:text-pink-500 hover:scale-125 duration-300 hover:drop-shadow-[0_0_8px_rgba(236,72,153,0.5)]"
-            >
-              <BsLinkedin size={30} />
-            </a>
-            <a
-              href={personalData.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-all text-gray-400 hover:text-pink-500 hover:scale-125 duration-300 hover:drop-shadow-[0_0_8px_rgba(236,72,153,0.5)]"
-            >
-              <BsInstagram size={30} />
-            </a>
-          </div>
+      {/* Empty band: the galaxy core sits at the viewport's vertical centre,
+          and keeping this clear is the whole point of the layout. */}
+      <div aria-hidden="true" className="flex-1" />
 
-          <div className="flex flex-wrap items-center gap-4">
-            <a
-              href="#contact"
-              className="bg-gradient-to-r from-pink-500 to-violet-600 p-[1px] rounded-full transition-all duration-300 hover:shadow-glow-secondary group"
-            >
-              <button className="px-4 text-xs md:px-8 py-3 md:py-4 bg-[#0d1224] rounded-full border-none text-center md:text-sm font-medium uppercase tracking-wider text-white no-underline transition-all duration-300 ease-out md:font-semibold flex items-center gap-2 group-hover:bg-transparent">
-                <span>Contact me</span>
-                <RiContactsFill size={16} />
-              </button>
-            </a>
-
-            <a
-              className="flex items-center gap-2 hover:gap-3 rounded-full bg-gradient-to-r from-pink-500 to-violet-600 px-4 md:px-8 py-[13px] md:py-[17px] text-center text-xs md:text-sm font-medium uppercase tracking-wider text-white no-underline transition-all duration-200 ease-out hover:text-white hover:no-underline md:font-semibold hover:shadow-glow-secondary"
-              role="button"
-              target="_blank"
-              rel="noopener noreferrer"
-              href={personalData.resume}
-            >
-              <span>Get Resume</span>
-              <MdDownload size={16} />
-            </a>
-          </div>
-        </div>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-          className="order-1 lg:order-2 flex items-center justify-center lg:justify-end w-full"
+      <div className="w-full">
+        <motion.h1
+          variants={RISE}
+          className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold uppercase tracking-tight text-white"
         >
-          <div className="relative group w-full max-w-[500px] lg:max-w-none mx-auto lg:ml-auto lg:mr-0 -mt-6 lg:-mt-10">
-            <div
-              className="absolute -inset-3 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-2xl -z-10"
-              style={{ background: "radial-gradient(circle, rgba(22,242,179,0.08) 0%, rgba(130,40,236,0.06) 50%, transparent 70%)" }}
-            />
+          {personalData.name}
+        </motion.h1>
 
-            <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-[#0d1224] to-[#0a0d37] shadow-glass transition-all duration-500 group-hover:shadow-[0_8px_40px_rgba(22,242,179,0.12),0_4px_20px_rgba(130,40,236,0.08)] group-hover:border-[#16f2b3]/20 group-hover:scale-[1.02]">
-              <div className="absolute top-0 left-0 right-0 z-10 flex flex-row">
-                <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-pink-500 to-violet-600 opacity-60" />
-                <div className="h-[2px] w-full bg-gradient-to-r from-violet-600 to-transparent opacity-60" />
-              </div>
+        <motion.p
+          variants={RISE}
+          className="mx-auto mt-4 max-w-2xl text-sm sm:text-base text-gray-400 uppercase tracking-[0.35em]"
+        >
+          {personalData.designation}
+        </motion.p>
 
-              <video
-                ref={video1Ref}
-                src="/video/video1.mp4"
-                playsInline
-                preload="auto"
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
-                onEnded={handleFirstEnded}
-                className="absolute inset-0 w-full h-full object-contain transition-opacity ease-in-out"
-                style={{
-                  opacity: isSecondActive ? 0 : 1,
-                  transitionDuration: `${TRANSITION_MS}ms`,
-                  zIndex: 2,
-                }}
-              />
+        <motion.div
+          variants={RISE}
+          className="mt-8 flex flex-wrap items-center justify-center gap-4"
+        >
+          <a
+            href="#contact"
+            className="hero-action group"
+          >
+            <span>CONTACT ME</span>
+            <RiContactsFill size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+          </a>
 
-              <video
-                ref={video2Ref}
-                src="/video/video 2.mp4"
-                playsInline
-                preload="auto"
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
-                onEnded={handleSecondEnded}
-                className="absolute inset-0 w-full h-full object-contain"
-                style={{ zIndex: 1 }}
-              />
+          <a
+            href={personalData.resume}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hero-action group"
+          >
+            <span>GET RESUME</span>
+            <MdDownload size={16} className="transition-transform duration-300 group-hover:translate-y-1" />
+          </a>
+        </motion.div>
 
-              <AnimatePresence>
-                {showSoundPrompt && isPlaying && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 8 }}
-                    transition={{ duration: 0.4 }}
-                    className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 cursor-pointer"
-                    onClick={handleUnmute}
-                  >
-                    <div
-                      className="flex items-center gap-2 px-4 py-2 rounded-full text-white text-xs font-semibold tracking-wide border border-[#16f2b3]/40 hover:border-[#16f2b3]/80 hover:shadow-[0_0_16px_rgba(22,242,179,0.3)] transition-all duration-300"
-                      style={{ background: "rgba(13,18,36,0.80)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
-                    >
-                      <svg className="w-4 h-4 text-[#16f2b3]" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6l4.72-3.15a.75.75 0 011.28.53v13.74a.75.75 0 01-1.28.53L6.75 14.25H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
-                      </svg>
-                      <span>Tap to play with sound</span>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {isPlaying && (
-                <motion.button
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                  onClick={isMuted ? handleUnmute : toggleMute}
-                  aria-label={isMuted ? "Unmute video" : "Mute video"}
-                  className="absolute bottom-3 right-3 z-20 flex items-center justify-center w-9 h-9 rounded-full border border-white/20 text-white/80 transition-all duration-300 hover:text-white hover:border-[#16f2b3]/50 hover:shadow-[0_0_12px_rgba(22,242,179,0.2)] focus:outline-none"
-                  style={{ background: "rgba(13, 18, 36, 0.6)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
-                >
-                  {isMuted ? (
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6l4.72-3.15a.75.75 0 011.28.53v13.74a.75.75 0 01-1.28.53L6.75 14.25H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
-                    </svg>
-                  ) : (
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-3.15a.75.75 0 011.28.53v13.74a.75.75 0 01-1.28.53L6.75 14.25H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
-                    </svg>
-                  )}
-                </motion.button>
-              )}
-
-              <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#0d1224]/40 to-transparent pointer-events-none" />
-            </div>
-          </div>
+        <motion.div
+          variants={RISE}
+          className="mt-8 flex items-center justify-center gap-6"
+        >
+          {SOCIAL_LINKS.map(({ href, Icon, label }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label}
+              className="text-gray-500 transition-all duration-300 hover:text-[#16f2b3] hover:scale-125 hover:drop-shadow-[0_0_10px_rgba(22,242,179,0.5)]"
+            >
+              <Icon size={22} />
+            </a>
+          ))}
         </motion.div>
       </div>
+
+      <motion.div
+        variants={RISE}
+        /* Hidden on small screens, where the fixed section-rail pill already
+           occupies the bottom edge. */
+        className="mt-10 hidden sm:flex flex-col items-center gap-3"
+        aria-hidden="true"
+      >
+        <span className="text-[0.6rem] uppercase tracking-[0.35em] text-gray-600">
+          Scroll
+        </span>
+        <span className="hero-scroll-line" />
+      </motion.div>
     </motion.section>
   );
 }
