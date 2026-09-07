@@ -16,7 +16,9 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background-color: #0d1224;
+  /* Deepened from #0d1224 so the hero galaxy reads as light in space rather
+     than as a wash over navy. Panels and cards keep the original palette. */
+  background-color: #05070f;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -38,6 +40,254 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #25213b;
+}
+
+/* ---------------------------------------------------------------------------
+   Hero galaxy + section rail
+   Only the styles the new hero composition depends on; the rest of the page
+   keeps its original design.
+   ------------------------------------------------------------------------ */
+
+/* Scroll-driven particle canvas. Fixed and non-interactive, behind all page
+   content (sections carry `relative z-50`). */
+.particle-field {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  display: block;
+  pointer-events: none;
+  animation: particle-field-in 1.6s ease-out both;
+}
+
+@keyframes particle-field-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Hero pill buttons: dark and understated so the galaxy stays the focus. */
+.hero-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem 1.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(13, 18, 36, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: #ffffff;
+  text-decoration: none;
+  transition: border-color 400ms ease, background-color 400ms ease,
+    box-shadow 400ms ease, transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-action:hover {
+  transform: translateY(-2px);
+  border-color: rgba(22, 242, 179, 0.45);
+  background: rgba(22, 242, 179, 0.08);
+  box-shadow: 0 10px 30px rgba(22, 242, 179, 0.16);
+}
+
+/* Scroll cue: a hairline with a highlight travelling down it. */
+.hero-scroll-line {
+  position: relative;
+  display: block;
+  width: 1px;
+  height: 3rem;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.hero-scroll-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 1px;
+  height: 40%;
+  background: linear-gradient(180deg, transparent, #16f2b3, transparent);
+  animation: scroll-cue 2.4s ease-in-out infinite;
+}
+
+@keyframes scroll-cue {
+  0% { top: -40%; }
+  100% { top: 100%; }
+}
+
+/* Cursor-tracking spotlight (position set via --x/--y). Visibility is toggled
+   with Tailwind opacity utilities on the element so hover wins the cascade. */
+.cursor-spotlight {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    360px circle at var(--x, 50%) var(--y, 50%),
+    rgba(22, 242, 179, 0.10),
+    transparent 60%
+  );
+}
+
+/* ---- Section rail (desktop) ---- */
+.section-rail {
+  position: fixed;
+  left: 1.25rem;
+  top: 50%;
+  z-index: 90;
+  display: none;
+  transform: translateY(-50%);
+  padding-left: 0.9rem;
+}
+
+@media (min-width: 1280px) {
+  .section-rail { display: block; }
+}
+
+.section-rail__track {
+  position: absolute;
+  left: 0;
+  top: 0.35rem;
+  bottom: 0.35rem;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+.section-rail__progress {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #16f2b3 0%, #8228ec 100%);
+  transform-origin: top;
+  transform: scaleY(0);
+  will-change: transform;
+}
+
+.section-rail__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.section-rail__item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(211, 216, 232, 0.4);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: color 400ms ease;
+}
+
+.section-rail__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(211, 216, 232, 0.3);
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 400ms ease, box-shadow 400ms ease;
+}
+
+.section-rail__label {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 450ms ease, transform 450ms cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.section-rail__item.is-passed .section-rail__dot {
+  background: rgba(22, 242, 179, 0.45);
+}
+
+.section-rail__item:hover,
+.section-rail__item.is-active {
+  color: #ffffff;
+}
+
+.section-rail__item:hover .section-rail__label,
+.section-rail__item.is-active .section-rail__label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.section-rail__item.is-active .section-rail__dot {
+  background: #16f2b3;
+  transform: scale(1.9);
+  box-shadow: 0 0 0 4px rgba(22, 242, 179, 0.14), 0 0 16px rgba(22, 242, 179, 0.6);
+}
+
+/* ---- Section rail (mobile / tablet) ---- */
+.section-rail-mobile {
+  position: fixed;
+  left: 50%;
+  bottom: 1rem;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.8rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: rgba(13, 18, 36, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  max-width: calc(100vw - 2rem);
+}
+
+@media (min-width: 1280px) {
+  .section-rail-mobile { display: none; }
+}
+
+.section-rail-mobile__label {
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #16f2b3;
+  white-space: nowrap;
+}
+
+.section-rail-mobile__dots {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.section-rail-mobile__dot {
+  width: 5px;
+  height: 5px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(211, 216, 232, 0.28);
+  transition: width 450ms cubic-bezier(0.16, 1, 0.3, 1), background-color 400ms ease;
+}
+
+.section-rail-mobile__dot.is-active {
+  width: 16px;
+  background: #16f2b3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particle-field { animation: none; }
+  .hero-scroll-line::after { animation: none; opacity: 0.5; }
+  .cursor-spotlight { display: none; }
+
+  .section-rail__progress,
+  .section-rail__dot,
+  .section-rail__label,
+  .section-rail-mobile__dot,
+  .hero-action {
+    transition: none;
+  }
 }
 
 /* Glassmorphism Utilities (Adapted to Original Theme) */

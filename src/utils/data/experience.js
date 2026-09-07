@@ -8,7 +8,7 @@ export const experiences = [
   },
   {
     id: 1,
-    title: 'Trainee Data Analytics Engineer',
+    title: 'Generative AI Engineer',
     company: 'Cravita Technologies',
     duration: 'July 2025 – December 2025',
     logo: '/images/cravita-logo-screenshot.png'

@@ -28,13 +28,13 @@ function Education() {
       </div>
 
       <div className="py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
-            className="flex justify-center items-start"
+            className="flex justify-center items-start lg:col-span-5"
           >
             <div className="w-3/4 h-3/4">
               <AnimationLottie animationPath={lottieFile} />
@@ -46,6 +46,7 @@ function Education() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, delay: 0.2 }}
+            className="lg:col-span-7"
           >
             <TimelineList>
               {
@@ -61,20 +62,26 @@ function Education() {
                         height={200}
                         className="absolute bottom-0 opacity-40 mix-blend-screen"
                       />
-                      <div className="flex justify-center">
-                        <p className="text-xs sm:text-sm text-[#16f2b3]">
-                          {education.duration}
-                        </p>
-                      </div>
                       <div className="flex items-center gap-x-4 sm:gap-x-8 px-3 py-5">
-                        <div className="text-violet-500 transition-all duration-300 hover:scale-125">
-                          <BsPersonWorkspace size={36} />
+                        <div className="text-violet-500 transition-all duration-300 hover:scale-125 flex-shrink-0">
+                          {education.logo ? (
+                            <img
+                              src={education.logo}
+                              alt={education.institution}
+                              className="w-24 h-24 sm:w-32 sm:h-32 object-contain rounded"
+                            />
+                          ) : (
+                            <BsPersonWorkspace size={36} />
+                          )}
                         </div>
                         <div>
-                          <p className="text-base sm:text-xl mb-2 font-medium uppercase text-white">
+                          <p className="text-sm sm:text-base mb-2 font-medium uppercase text-white">
                             {education.title}
                           </p>
-                          <p className="text-sm sm:text-base text-gray-300">{education.institution}</p>
+                          <p className="text-sm sm:text-base text-pink-500">{education.institution}</p>
+                          <p className="text-xs sm:text-sm text-[#16f2b3] mt-1">
+                            {education.duration}
+                          </p>
                         </div>
                       </div>
                     </div>

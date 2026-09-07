@@ -1,5 +1,6 @@
 import { personalData } from "@/utils/data/personal-data";
 import { motion } from "framer-motion";
+import GlowCard from "../../helper/GlowCard";
 
 function AboutSection() {
   return (
@@ -27,14 +28,18 @@ function AboutSection() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8 }}
-          className="order-2 lg:order-1 w-full glass-card pt-8 pr-8 pb-8 pl-4 lg:pt-12 lg:pr-12 lg:pb-12 lg:pl-6 rounded-2xl"
+          className="order-2 lg:order-1 w-full"
         >
-          <p className="font-medium mb-5 text-[#16f2b3] text-xl uppercase tracking-widest">
-            Who I am
-          </p>
-          <p className="text-gray-300 text-sm lg:text-lg leading-relaxed">
-            {personalData.description}
-          </p>
+          <GlowCard identifier="about-me-card">
+            <div className="glass-card pt-8 pr-8 pb-8 pl-4 lg:pt-12 lg:pr-12 lg:pb-12 lg:pl-6 rounded-2xl w-full">
+              <p className="font-medium mb-5 text-[#16f2b3] text-xl uppercase tracking-widest">
+                Who I am
+              </p>
+              <p className="text-gray-300 text-sm lg:text-lg leading-relaxed">
+                {personalData.description}
+              </p>
+            </div>
+          </GlowCard>
         </motion.div>
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
