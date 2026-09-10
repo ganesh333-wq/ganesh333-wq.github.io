@@ -1,29 +1,20 @@
 import { personalData } from "@/utils/data/personal-data";
 import { motion } from "framer-motion";
 import GlowCard from "../../helper/GlowCard";
+import SectionHeader from "../../helper/SectionHeader";
 
 function AboutSection() {
   return (
-    <div id="about" className="my-12 lg:my-16 relative section-viewport overflow-x-hidden">
-      <div className="hidden lg:flex flex-col items-center absolute top-16 -right-8">
-        <span className="bg-[#1a1443] border border-white/10 w-fit text-white rotate-90 p-2 px-5 text-xl rounded-md shadow-glass">
-          ABOUT ME
-        </span>
-        <span className="h-36 w-[2px] bg-gradient-to-b from-transparent via-violet-500 to-transparent opacity-30 mt-8"></span>
-      </div>
+    <section
+      id="about"
+      className="section-shell section-shell--flush section-viewport relative z-50 overflow-x-hidden"
+    >
+      <SectionHeader
+        title="A quick introduction."
+      />
 
-      <div className="flex justify-center my-5 lg:hidden">
-        <div className="flex items-center">
-          <span className="w-12 sm:w-24 h-[2px] bg-gradient-to-r from-transparent to-violet-500/50"></span>
-          <span className="bg-[#1a1443] border border-white/10 w-fit text-white p-2 px-5 text-xl rounded-md shadow-glass tracking-widest uppercase text-sm font-medium">
-            About Me
-          </span>
-          <span className="w-12 sm:w-24 h-[2px] bg-gradient-to-l from-transparent to-violet-500/50"></span>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-[1.8fr_1fr] gap-6 items-center">
-        <motion.div 
+      <div className="section-body section-split">
+        <motion.div
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -31,22 +22,23 @@ function AboutSection() {
           className="order-2 lg:order-1 w-full"
         >
           <GlowCard identifier="about-me-card">
-            <div className="glass-card pt-8 pr-8 pb-8 pl-4 lg:pt-12 lg:pr-12 lg:pb-12 lg:pl-6 rounded-2xl w-full">
-              <p className="font-medium mb-5 text-[#16f2b3] text-xl uppercase tracking-widest">
+            <div className="glass-card w-full rounded-2xl p-6 sm:p-8 lg:p-10">
+              <p className="mb-5 text-sm font-medium uppercase tracking-[0.2em] text-[#16f2b3]">
                 Who I am
               </p>
-              <p className="text-gray-300 text-sm lg:text-lg leading-relaxed">
+              <p className="max-w-[62ch] text-sm leading-relaxed text-gray-300 lg:text-lg lg:leading-[1.85]">
                 {personalData.description}
               </p>
             </div>
           </GlowCard>
         </motion.div>
-        <motion.div 
+
+        <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex justify-center lg:justify-start order-1 lg:order-2"
+          className="order-1 flex justify-center lg:order-2 lg:justify-end"
         >
           <div className="relative group">
             <div className="absolute -inset-1 bg-gradient-to-r from-violet-500 to-pink-500 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
@@ -55,12 +47,12 @@ function AboutSection() {
               width={280}
               height={280}
               alt="Ganesh Pratap Barade"
-              className="relative rounded-lg transition-all duration-1000 grayscale group-hover:grayscale-0 group-hover:scale-[1.02] cursor-pointer object-cover max-w-full h-auto w-[240px] sm:w-[280px]"
+              className="relative rounded-lg transition-all duration-1000 grayscale group-hover:grayscale-0 group-hover:scale-[1.02] cursor-pointer object-cover max-w-full h-auto w-[240px] sm:w-[280px] lg:w-[300px]"
             />
           </div>
         </motion.div>
       </div>
-    </div>
+    </section>
   );
 }
 
