@@ -252,3 +252,50 @@ export function createStarfield(count, paletteLength) {
 
   return stars;
 }
+
+/**
+ * The meteor field that streams through the same space once the "Who I Am"
+ * section arrives.
+ *
+ * Modelled directly on the reference clip, whose defining trait is that the
+ * trail and the direction of travel do NOT agree: every streak is drawn at a
+ * fixed 35 degrees while the field as a whole drifts at roughly 59 degrees. The
+ * streaks therefore appear to slide slightly sideways as they fall, which is
+ * what separates this from a generic diagonal rain of lines. Both angles are
+ * shared by every meteor - in the reference they are constant to within a fifth
+ * of a degree - so they live as module constants rather than per-particle.
+ *
+ * `speed` is the only depth cue, spanning roughly 3x as it does in the
+ * reference. It scales travel rate, trail length and brightness together.
+ */
+export function createMeteors(count, paletteLength) {
+  const random = makeRandom(0xc2b2ae35);
+  const meteors = new Array(count);
+
+  for (let i = 0; i < count; i += 1) {
+    // Squared so the field is weighted towards the slower, more distant
+    // layers and only a few streaks tear past close to the camera.
+    const speed = 0.55 + Math.pow(random(), 1.7) * 1.2;
+
+    meteors[i] = {
+      x: random(),
+      y: random(),
+      speed,
+      // Trail length is near-constant in the reference; the small jitter and
+      // the slight stretch with speed stop same-layer streaks reading as
+      // copies of one another.
+      length: (71 + random() * 22) * (0.82 + speed * 0.22),
+      brightness: 0.72 + Math.pow(random(), 1.4) * 0.28,
+      colorIndex: Math.floor(random() * paletteLength),
+    };
+  }
+
+  return meteors;
+}
+
+// The two angles that define the look, in radians. TRAIL is the direction the
+// streak is drawn; DRIFT is the direction it actually travels.
+export const METEOR_TRAIL_ANGLE = (35 * Math.PI) / 180;
+export const METEOR_DRIFT_ANGLE = (59 * Math.PI) / 180;
+export const METEOR_DRIFT_X = Math.cos(METEOR_DRIFT_ANGLE);
+export const METEOR_DRIFT_Y = Math.sin(METEOR_DRIFT_ANGLE);

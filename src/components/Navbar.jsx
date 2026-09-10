@@ -172,7 +172,7 @@ function Navbar() {
             </div>
 
             <button
-              className="md:hidden text-gray-300 hover:text-[#16f2b3] focus:outline-none transition-colors duration-300"
+              className="md:hidden text-gray-300 hover:text-pink-500 focus:outline-none transition-colors duration-300"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -208,7 +208,7 @@ function Navbar() {
               />
               <li className="md:hidden mt-2 px-4 w-full">
                 <a
-                  className="block w-full text-center rounded-full bg-[#1a1443] border border-violet-600/30 px-5 py-2 text-sm font-medium text-white no-underline outline-none shadow-[0_0_20px_rgba(124,58,237,0.3)] transition-all duration-300 hover:bg-violet-600 hover:border-transparent"
+                  className="block w-full text-center rounded-full btn-shine px-5 py-2 text-sm font-medium no-underline outline-none"
                   href="/#contact"
                   onClick={(event) => handleNavClick(event, "contact")}
                 >
@@ -217,7 +217,7 @@ function Navbar() {
               </li>
             </ul>
             <a
-              className="ml-4 hidden rounded-full bg-[#1a1443] border border-violet-600/30 px-5 py-2 text-sm font-medium text-white no-underline outline-none shadow-[0_0_20px_rgba(124,58,237,0.3)] transition-all duration-300 hover:bg-violet-600 hover:border-transparent hover:text-white md:block"
+              className="ml-4 hidden rounded-full btn-shine px-5 py-2 text-sm font-medium no-underline outline-none hover:text-white md:block"
               href="/#contact"
               onClick={(event) => handleNavClick(event, "contact")}
             >

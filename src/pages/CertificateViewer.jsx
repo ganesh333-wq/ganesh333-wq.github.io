@@ -14,7 +14,7 @@ export default function CertificateViewer() {
         <h1 className="text-2xl font-semibold mb-4">Certificate Not Found</h1>
         <Link
           to="/#certifications"
-          className="rounded-md border border-violet-500 px-4 py-2 text-sm text-white hover:bg-violet-500"
+          className="btn-shine rounded-md px-4 py-2 text-sm"
         >
           Back to Portfolio
         </Link>
@@ -36,7 +36,7 @@ export default function CertificateViewer() {
             <div className="flex gap-3">
               <Link
                 to="/#certifications"
-                className="rounded-md border border-violet-500 px-4 py-2 text-sm text-white hover:bg-violet-500"
+                className="btn-shine rounded-md px-4 py-2 text-sm"
               >
                 Back
               </Link>

@@ -3,97 +3,96 @@ import { BsPersonWorkspace } from "react-icons/bs";
 import AnimationLottie from "../../helper/AnimationLottie";
 import GlowCard from "../../helper/GlowCard";
 import TimelineList from "../../helper/TimelineList";
+import SectionHeader from "../../helper/SectionHeader";
 import lottieFile from '/public/lottie/study.json';
 import { motion } from "framer-motion";
 
 function Education() {
   return (
-    <div id="education" className="relative z-50 border-t my-12 lg:my-24 border-white/5 pt-12 section-viewport overflow-x-hidden">
+    <section
+      id="education"
+      className="section-shell section-viewport relative z-50 overflow-x-hidden"
+    >
       <img
         src="/section.svg"
-        alt="Hero"
+        alt=""
+        aria-hidden="true"
         width={1572}
         height={795}
         className="absolute top-0 -z-10 opacity-30 mix-blend-screen"
       />
 
-      <div className="flex justify-center my-5 lg:py-8">
-        <div className="flex items-center">
-          <span className="w-24 h-[2px] bg-gradient-to-r from-transparent to-violet-500/50"></span>
-          <span className="bg-[#1a1443] border border-white/10 w-fit text-gray-300 p-2 px-5 text-xl rounded-md shadow-glass tracking-widest uppercase text-sm font-medium">
-            Educations
-          </span>
-          <span className="w-24 h-[2px] bg-gradient-to-l from-transparent to-violet-500/50"></span>
-        </div>
-      </div>
+      <SectionHeader
+        title="Where I learned it."
+        description="A computer-science foundation in artificial intelligence and analytics, backed by coursework in machine learning, deep learning and data engineering."
+      />
 
-      <div className="py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
-          <motion.div 
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
-            className="flex justify-center items-start lg:col-span-5"
-          >
-            <div className="w-3/4 h-3/4">
-              <AnimationLottie animationPath={lottieFile} />
-            </div>
-          </motion.div>
+      <div className="section-body section-split section-split--media-first">
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8 }}
+          className="flex justify-center lg:justify-start"
+        >
+          <div className="section-media lg:mx-0">
+            <AnimationLottie animationPath={lottieFile} />
+          </div>
+        </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="lg:col-span-7"
-          >
-            <TimelineList>
-              {
-                educations.map(education => (
-                  <div className="timeline-item" key={education.id}>
-                    <span className="timeline-node" aria-hidden="true"></span>
-                    <GlowCard identifier={`education-${education.id}`}>
-                    <div className="p-3 relative text-white glass-card rounded-xl">
-                      <img
-                        src="/blur-23.svg"
-                        alt="Hero"
-                        width={1080}
-                        height={200}
-                        className="absolute bottom-0 opacity-40 mix-blend-screen"
-                      />
-                      <div className="flex items-center gap-x-4 sm:gap-x-8 px-3 py-5">
-                        <div className="text-violet-500 transition-all duration-300 hover:scale-125 flex-shrink-0">
-                          {education.logo ? (
-                            <img
-                              src={education.logo}
-                              alt={education.institution}
-                              className="w-24 h-24 sm:w-32 sm:h-32 object-contain rounded"
-                            />
-                          ) : (
-                            <BsPersonWorkspace size={36} />
-                          )}
-                        </div>
-                        <div>
-                          <p className="text-sm sm:text-base mb-2 font-medium uppercase text-white">
-                            {education.title}
-                          </p>
-                          <p className="text-sm sm:text-base text-pink-500">{education.institution}</p>
-                          <p className="text-xs sm:text-sm text-[#16f2b3] mt-1">
-                            {education.duration}
-                          </p>
-                        </div>
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="w-full min-w-0"
+        >
+          <TimelineList>
+            {
+              educations.map(education => (
+                <div className="timeline-item" key={education.id}>
+                  <span className="timeline-node" aria-hidden="true"></span>
+                  <GlowCard identifier={`education-${education.id}`}>
+                  <div className="p-3 relative text-white glass-card rounded-xl">
+                    <img
+                      src="/blur-23.svg"
+                      alt=""
+                      aria-hidden="true"
+                      width={1080}
+                      height={200}
+                      className="absolute bottom-0 opacity-40 mix-blend-screen w-full"
+                    />
+                    <div className="flex min-h-[140px] items-center gap-x-4 px-3 py-6 sm:gap-x-6 sm:px-5 lg:min-h-[160px] lg:py-8">
+                      <div className="flex-shrink-0 text-violet-500 transition-all duration-300 hover:scale-125">
+                        {education.logo ? (
+                          <img
+                            src={education.logo}
+                            alt={education.institution}
+                            className="h-20 w-20 object-contain rounded sm:h-24 sm:w-24 lg:h-28 lg:w-28"
+                          />
+                        ) : (
+                          <BsPersonWorkspace size={36} />
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="mb-2 text-sm font-medium uppercase leading-tight text-white sm:text-base">
+                          {education.title}
+                        </p>
+                        <p className="text-sm sm:text-base text-pink-500">{education.institution}</p>
+                        <p className="mt-1 text-xs sm:text-sm text-[#16f2b3]">
+                          {education.duration}
+                        </p>
                       </div>
                     </div>
-                    </GlowCard>
                   </div>
-                ))
-              }
-            </TimelineList>
-          </motion.div>
-        </div>
+                  </GlowCard>
+                </div>
+              ))
+            }
+          </TimelineList>
+        </motion.div>
       </div>
-    </div>
+    </section>
   );
 }
 

@@ -1,8 +1,14 @@
 import { useEffect, useRef } from "react";
 import {
+  TAU,
   buildStates,
+  createMeteors,
   createParticles,
   createStarfield,
+  makeRandom,
+  METEOR_DRIFT_X,
+  METEOR_DRIFT_Y,
+  METEOR_TRAIL_ANGLE,
 } from "@/utils/particle-shapes";
 
 // Canvas 2D rather than WebGL: a few thousand additive sprites is well within
@@ -61,6 +67,17 @@ function fieldIntensity(width) {
   return 1;
 }
 
+// Meteors are hairlines drawn from one cached bitmap inside a single shared
+// rotation, so they cost far less than the star field they sit in front of.
+// The counts track the reference's density of roughly one streak per 9,900
+// CSS pixels of viewport.
+function meteorBudget(width) {
+  if (width < 640) return 34;
+  if (width < 1024) return 60;
+  if (width < 1600) return 95;
+  return 120;
+}
+
 function starBudget(width) {
   if (width < 640) return 90;
   if (width < 1024) return 150;
@@ -90,6 +107,84 @@ function makeSprite(color) {
   return canvas;
 }
 
+// Nominal sprite length in device-independent units. The bitmap is drawn
+// stretched to each meteor's own length, so one bitmap serves the whole field.
+const METEOR_SPRITE_W = 256;
+const METEOR_SPRITE_H = 16;
+// Median drawn length of a streak. Only referenced when pre-compensating the
+// head bloom below; the per-meteor lengths themselves come from
+// createMeteors, and this needs to track them so the head stays round.
+const METEOR_NOMINAL_LENGTH = 78;
+// Drawn thickness of a streak, kept in proportion to the length so the core
+// stays a fine line and the surrounding falloff supplies the glow.
+const METEOR_THICKNESS = 7.5;
+// How much wider than tall the sprite is stretched at nominal length, used to
+// pre-compensate the head bloom.
+const METEOR_HEAD_ASPECT =
+  (METEOR_SPRITE_W / METEOR_NOMINAL_LENGTH) /
+  (METEOR_SPRITE_H / METEOR_THICKNESS);
+
+// A single meteor: a hairline that is brightest at the head and fades to
+// nothing along the tail, plus a small bloom at the head itself. The reference
+// streaks are a pixel wide with a distinct dot at the leading end, and it is
+// that dot that makes them read as travelling rather than as static scratches.
+function makeMeteorSprite(color) {
+  const canvas = document.createElement("canvas");
+  canvas.width = METEOR_SPRITE_W;
+  canvas.height = METEOR_SPRITE_H;
+
+  const context = canvas.getContext("2d");
+  const rgb = `${color.r}, ${color.g}, ${color.b}`;
+  const mid = METEOR_SPRITE_H * 0.5;
+
+  // Head sits at the right-hand edge, so the sprite is drawn back along -x
+  // from the meteor's position.
+  // Close to linear over most of the length, with only a short fade-out at
+  // the tail tip. Measuring the reference showed its visible trail ramping
+  // from roughly 38% to 100% brightness rather than falling away sharply, and
+  // a steeper curve here shortens the streak that actually reads on screen.
+  const along = context.createLinearGradient(0, 0, METEOR_SPRITE_W, 0);
+  along.addColorStop(0, `rgba(${rgb}, 0)`);
+  along.addColorStop(0.12, `rgba(${rgb}, 0.14)`);
+  along.addColorStop(0.5, `rgba(${rgb}, 0.42)`);
+  along.addColorStop(0.85, `rgba(${rgb}, 0.8)`);
+  along.addColorStop(1, `rgba(${rgb}, 1)`);
+  context.fillStyle = along;
+  context.fillRect(0, 0, METEOR_SPRITE_W, METEOR_SPRITE_H);
+
+  // Squeeze the bar down to a hairline. Kept tight so that even after the
+  // sprite is stretched the core stays about a pixel across, as in the
+  // reference, instead of blooming into a smear.
+  context.globalCompositeOperation = "destination-in";
+  const across = context.createLinearGradient(0, 0, 0, METEOR_SPRITE_H);
+  across.addColorStop(0, "rgba(0, 0, 0, 0)");
+  across.addColorStop(0.42, "rgba(0, 0, 0, 0)");
+  across.addColorStop(0.5, "rgba(0, 0, 0, 1)");
+  across.addColorStop(0.58, "rgba(0, 0, 0, 0)");
+  across.addColorStop(1, "rgba(0, 0, 0, 0)");
+  context.fillStyle = across;
+  context.fillRect(0, 0, METEOR_SPRITE_W, METEOR_SPRITE_H);
+
+  // The head bloom, added back on top of the tapered line. The sprite is
+  // stretched far more along its length than across it, so a round gradient
+  // here would arrive on screen as a squashed wedge; pre-stretching it by the
+  // inverse of that ratio is what keeps the head the small round dot the
+  // reference shows rather than an arrowhead.
+  context.globalCompositeOperation = "lighter";
+  context.save();
+  context.translate(METEOR_SPRITE_W - 5, mid);
+  context.scale(METEOR_HEAD_ASPECT, 1);
+  const head = context.createRadialGradient(0, 0, 0, 0, 0, 5.5);
+  head.addColorStop(0, `rgba(${rgb}, 1)`);
+  head.addColorStop(0.4, `rgba(${rgb}, 0.45)`);
+  head.addColorStop(1, `rgba(${rgb}, 0)`);
+  context.fillStyle = head;
+  context.fillRect(-6, -6, 12, 12);
+  context.restore();
+
+  return canvas;
+}
+
 function ParticleField() {
   const canvasRef = useRef(null);
 
@@ -106,9 +201,13 @@ function ParticleField() {
     // punch a hole in the field under the user's finger mid-scroll.
     const finePointer = window.matchMedia("(pointer: fine)");
     const sprites = PALETTE.map(makeSprite);
+    // One meteor bitmap per palette colour; every streak is this bitmap
+    // stretched to its own length.
+    const meteorSprites = PALETTE.map(makeMeteorSprite);
 
     let particles = [];
     let stars = [];
+    let meteors = [];
     let states = new Float32Array(0);
     // Screen-space displacement and velocity from cursor interaction, kept in
     // flat typed arrays so the per-frame integration stays allocation-free.
@@ -131,6 +230,14 @@ function ParticleField() {
     let heroHeight = 0;
     let scrollable = 1;
     let metricsAge = 0;
+    // Document offset at which the meteor layer starts: the top of the
+    // "Who I Am" section. Infinity while that section is absent (the
+    // certificate route), which keeps the layer switched off there.
+    let meteorAnchor = Infinity;
+    // Smoothed scroll speed in px/s, used only to stretch the motion-blur
+    // tails. Smoothed so a jittery wheel does not make them flicker.
+    let scrollSpeed = 0;
+    let lastScrollY = 0;
 
     let pointerX = 0;
     let pointerY = 0;
@@ -171,6 +278,13 @@ function ParticleField() {
       if (stars.length !== nextStars) {
         stars = createStarfield(nextStars, PALETTE.length);
       }
+
+      const nextMeteors = reduceMotion.matches
+        ? Math.round(meteorBudget(window.innerWidth) * 0.45)
+        : meteorBudget(window.innerWidth);
+      if (meteors.length !== nextMeteors) {
+        meteors = createMeteors(nextMeteors, PALETTE.length);
+      }
     };
 
     const resize = () => {
@@ -200,6 +314,12 @@ function ParticleField() {
         document.documentElement.scrollHeight - window.innerHeight,
         1
       );
+
+      const about = document.getElementById("about");
+      meteorAnchor = about
+        ? about.getBoundingClientRect().top + window.scrollY
+        : Infinity;
+
       metricsAge = 0;
     };
 
@@ -278,6 +398,10 @@ function ParticleField() {
       if (metricsAge > 0.5) measureLayout();
 
       const scrollY = window.scrollY;
+      const instantSpeed = delta > 0 ? (scrollY - lastScrollY) / delta : 0;
+      scrollSpeed += (instantSpeed - scrollSpeed) * (1 - Math.exp(-delta * 9));
+      lastScrollY = scrollY;
+
       const heroTarget = heroHeight > 0 ? scrollY / heroHeight : 0;
       pageProgress = scrollY / scrollable;
 
@@ -534,6 +658,93 @@ function ParticleField() {
         }
       }
 
+      // --- Meteors -----------------------------------------------------------
+      // Begins exactly where the "Who I Am" section crosses into the viewport
+      // and continues to the end of the document. Nothing here runs above that
+      // point, so the galaxy composition is untouched.
+      //
+      // The look is taken from the reference clip: every streak is drawn along
+      // a single fixed angle while the field drifts along a steeper one, so the
+      // meteors slide slightly sideways as they fall. Position is a pure
+      // function of how far the page has been scrolled past the anchor, which
+      // means scrolling back up replays the same journey backwards instead of
+      // restarting it.
+      const travel = scrollY + height - meteorAnchor;
+
+      if (travel > 0 && meteors.length > 0) {
+        // The field arrives over the first three quarters of a viewport rather
+        // than switching on, which is what keeps the handover from the galaxy
+        // seamless.
+        const arrival = Math.min(travel / (height * 0.75), 1);
+        const layerAlpha =
+          arrival * arrival * (3 - 2 * arrival) * fieldIntensity(width);
+
+        if (layerAlpha > 0.01) {
+          // Ambient flow keeps the field moving while the page is still, as it
+          // does in the reference; the scroll term dominates it, so the layer
+          // still reads as scroll-driven and still reverses on the way up.
+          const flow = travel * 0.45 + (still ? 0 : seconds * 34);
+
+          // Wrapped over a span larger than the viewport so streaks enter and
+          // leave off-screen rather than popping at the edges.
+          const marginX = 160;
+          const marginY = 160;
+          const spanX = width + marginX * 2;
+          const spanY = height + marginY * 2;
+
+          // The trail angle is shared by every meteor, so the rotation is set
+          // up once for the whole batch and each position is mapped into that
+          // rotated frame with two multiply-adds - far cheaper than a
+          // save/rotate/restore per streak.
+          const cos = Math.cos(METEOR_TRAIL_ANGLE);
+          const sin = Math.sin(METEOR_TRAIL_ANGLE);
+
+          context.save();
+          context.rotate(METEOR_TRAIL_ANGLE);
+
+          for (let i = 0; i < meteors.length; i += 1) {
+            const meteor = meteors[i];
+            const distance = flow * meteor.speed;
+
+            let x = meteor.x * spanX + METEOR_DRIFT_X * distance;
+            let y = meteor.y * spanY + METEOR_DRIFT_Y * distance;
+
+            x = ((x % spanX) + spanX) % spanX - marginX;
+            y = ((y % spanY) + spanY) % spanY - marginY;
+
+            const length = meteor.length;
+            if (
+              x < -length ||
+              x > width + length ||
+              y < -length ||
+              y > height + length
+            ) {
+              continue;
+            }
+
+            // Faster (nearer) streaks read brighter, which is the only depth
+            // cue the reference uses.
+            context.globalAlpha = Math.min(
+              meteor.brightness * (0.34 + meteor.speed * 0.3) * layerAlpha,
+              1
+            );
+
+            // Thickness is constant regardless of length, so the drawn core
+            // stays the hairline the reference shows however long the streak.
+            context.drawImage(
+              meteorSprites[meteor.colorIndex],
+              x * cos + y * sin - length,
+              -x * sin + y * cos - METEOR_THICKNESS * 0.5,
+              length,
+              METEOR_THICKNESS
+            );
+          }
+
+          context.restore();
+        }
+      }
+
+
       context.globalAlpha = 1;
       context.globalCompositeOperation = "source-over";
     };
@@ -554,6 +765,7 @@ function ParticleField() {
     };
 
     resize();
+    lastScrollY = window.scrollY;
     // Seat the smoothed progress at the real scroll position so a reload
     // partway down the page does not animate the dispersal from scratch.
     heroSmoothed = heroHeight > 0 ? window.scrollY / heroHeight : 0;

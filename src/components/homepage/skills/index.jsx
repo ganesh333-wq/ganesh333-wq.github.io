@@ -1,35 +1,28 @@
 import { skillsData } from "@/utils/data/skills";
 import { skillsImage } from "@/utils/skill-image";
+import SectionHeader from "../../helper/SectionHeader";
 import Marquee from "react-fast-marquee";
 import { motion } from "framer-motion";
 
 function Skills() {
   return (
-    <div id="skills" className="relative z-50 border-t my-12 lg:my-24 border-white/5 section-viewport overflow-x-hidden">
-      <div className="w-[100px] h-[100px] bg-violet-500 rounded-full absolute top-6 left-[42%] translate-x-1/2 filter blur-3xl opacity-20"></div>
+    <section
+      id="skills"
+      className="section-shell section-viewport relative z-50 overflow-x-hidden"
+    >
+      <div className="pointer-events-none absolute top-6 left-1/2 h-[100px] w-[100px] -translate-x-1/2 rounded-full bg-violet-500 opacity-20 blur-3xl"></div>
 
-      <div className="flex justify-center -translate-y-[1px]">
-        <div className="w-3/4">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-violet-500 to-transparent opacity-50 w-full" />
-        </div>
-      </div>
+      <SectionHeader
+        title="The stack I work in."
+        description="Languages, frameworks and platforms I use to take AI systems from prototype to production."
+      />
 
-      <div className="flex justify-center my-5 lg:py-8">
-        <div className="flex items-center">
-          <span className="w-24 h-[2px] bg-gradient-to-r from-transparent to-violet-500/50"></span>
-          <span className="bg-[#1a1443] border border-white/10 w-fit text-gray-300 p-2 px-5 text-xl rounded-md shadow-glass tracking-widest uppercase text-sm font-medium">
-            Skills
-          </span>
-          <span className="w-24 h-[2px] bg-gradient-to-l from-transparent to-violet-500/50"></span>
-        </div>
-      </div>
-
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8 }}
-        className="w-full my-12"
+        className="section-body w-full"
       >
         <Marquee
           gradient={false}
@@ -41,7 +34,7 @@ function Skills() {
           direction="left"
         >
           {skillsData.map((skill, id) => (
-            <div className="w-36 min-w-fit h-fit flex flex-col items-center justify-center transition-all duration-500 m-3 sm:m-5 rounded-lg group relative hover:scale-[1.15] cursor-pointer"
+            <div className="group relative m-2 flex h-fit w-32 min-w-fit cursor-pointer flex-col items-center justify-center rounded-lg transition-all duration-500 hover:scale-[1.12] sm:m-3 sm:w-36"
               key={id}>
               <div className="h-full w-full rounded-lg border border-white/10 glass-panel shadow-none group-hover:border-violet-500 transition-all duration-500 group-hover:shadow-[0_0_20px_rgba(139,92,246,0.3)]">
                 <div className="flex -translate-y-[1px] justify-center">
@@ -49,7 +42,7 @@ function Skills() {
                     <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-violet-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>
                 </div>
-                <div className="flex flex-col items-center justify-center gap-3 p-6">
+                <div className="flex flex-col items-center justify-center gap-3 px-4 py-6 sm:px-6">
                   <div className="h-8 sm:h-10">
                     <img
                       src={skillsImage(skill)}
@@ -59,7 +52,7 @@ function Skills() {
                       className="h-full w-auto rounded-lg group-hover:drop-shadow-[0_0_8px_rgba(139,92,246,0.5)] transition-all duration-500"
                     />
                   </div>
-                  <p className="text-gray-300 group-hover:text-white transition-colors duration-500 text-sm sm:text-lg font-medium">
+                  <p className="text-center text-sm font-medium text-gray-300 transition-colors duration-500 group-hover:text-white sm:text-base">
                     {skill}
                   </p>
                 </div>
@@ -68,7 +61,7 @@ function Skills() {
           ))}
         </Marquee>
       </motion.div>
-    </div>
+    </section>
   );
 }
 

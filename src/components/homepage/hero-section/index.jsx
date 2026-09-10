@@ -61,7 +61,7 @@ function HeroSection() {
 
         <motion.p
           variants={RISE}
-          className="mx-auto mt-4 max-w-2xl text-sm sm:text-base text-gray-400 uppercase tracking-[0.35em]"
+          className="mx-auto mt-4 max-w-2xl text-sm sm:text-base text-[#16f2b3] uppercase tracking-[0.35em]"
         >
           {personalData.designation}
         </motion.p>
