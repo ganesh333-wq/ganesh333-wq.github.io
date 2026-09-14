@@ -8,6 +8,7 @@ const RAIL_ITEMS = [
   { id: "hero", label: "Intro" },
   { id: "about", label: "Who I Am" },
   { id: "experience", label: "Experience" },
+  { id: "services", label: "Services" },
   { id: "skills", label: "Skills" },
   { id: "projects", label: "Projects" },
   { id: "certifications", label: "Certifications" },
