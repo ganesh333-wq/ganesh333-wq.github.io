@@ -3,6 +3,7 @@ import Certifications from "../components/homepage/certifications";
 import ContactSection from "../components/homepage/contact";
 import Education from "../components/homepage/education";
 import Experience from "../components/homepage/experience";
+import Services from "../components/homepage/services";
 import HeroSection from "../components/homepage/hero-section";
 import Projects from "../components/homepage/projects";
 import Skills from "../components/homepage/skills";
@@ -22,6 +23,7 @@ function HomePage() {
       </div>
       <AboutSection />
       <Experience />
+      <Services />
       <Skills />
       <Projects />
       <Certifications />

@@ -17,6 +17,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/certifications/:slug" element={<CertificateViewer />} />
+          <Route path="*" element={<HomePage />} />
         </Routes>
       </main>
       <Footer />

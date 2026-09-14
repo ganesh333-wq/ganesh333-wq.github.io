@@ -5,6 +5,7 @@ import { IoMdMenu, IoMdClose } from "react-icons/io";
 const NAV_ITEMS = [
   { id: "about", label: "ABOUT" },
   { id: "experience", label: "EXPERIENCE" },
+  { id: "services", label: "SERVICES" },
   { id: "skills", label: "SKILLS" },
   { id: "projects", label: "PROJECTS" },
   { id: "certifications", label: "CERTIFICATIONS" },

@@ -34,11 +34,21 @@ export default function CertificateViewer() {
               </h1>
             </div>
             <div className="flex gap-3">
+              {certificate.file && (
+                <a
+                  href={certificate.file}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-shine rounded-md px-4 py-2 text-sm no-underline"
+                >
+                  View / Download PDF
+                </a>
+              )}
               <Link
                 to="/#certifications"
-                className="btn-shine rounded-md px-4 py-2 text-sm"
+                className="rounded-md border border-white/10 bg-white/5 px-4 py-2 text-sm text-gray-300 hover:bg-white/10 hover:text-white no-underline"
               >
-                Back
+                Back to Portfolio
               </Link>
             </div>
           </div>

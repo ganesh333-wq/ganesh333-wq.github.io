@@ -1,98 +1,156 @@
-import * as React from "react";
-import { HiMiniArrowTopRightOnSquare } from "react-icons/hi2";
-
-const formatProjectDescription = (description) =>
-  description.replace(/\s*•/g, "\n•").trim();
+import { useState } from "react";
+import { FaGithub, FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 function ProjectCard({ project }) {
-  const hasProjectLink = project.name !== "8+ Admin Panel" && project.demo;
+  const [showAllSkills, setShowAllSkills] = useState(false);
+  const defaultLimit = project.maxVisibleTech || 5;
+  const visibleTech = showAllSkills ? project.tools : project.tools.slice(0, defaultLimit);
+  const extraCount = project.tools.length - defaultLimit;
+
+  // Map categories to colors
+  const categoryColors = {
+    "AI Projects": { bg: "#3b82f620", text: "#3b82f6", border: "#3b82f640" },
+    "ML / Deep Learning": { bg: "#8b5cf620", text: "#8b5cf6", border: "#8b5cf640" },
+    "Data Analytics": { bg: "#f59e0b20", text: "#f59e0b", border: "#f59e0b40" },
+    "NLP / Analytics": { bg: "#06b6d420", text: "#06b6d4", border: "#06b6d440" },
+  };
+
+  const statusColors = {
+    "Production Ready": { bg: "#16f2b315", text: "#16f2b3", border: "#16f2b340" },
+    "Completed": { bg: "#3b82f615", text: "#3b82f6", border: "#3b82f640" },
+  };
+
+  const catStyle = categoryColors[project.category] || categoryColors["AI Projects"];
+  const statStyle = statusColors[project.status] || statusColors["Completed"];
 
   return (
-    <div className="relative rounded-xl border border-white/10 glass-card w-full group-hover:border-pink-500 transition-colors duration-500">
-      <div className="flex flex-row">
-        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-pink-500 to-violet-600 opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div>
-        <div className="h-[1px] w-full bg-gradient-to-r from-violet-600 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div>
+    <div className="relative rounded-2xl border border-[#2a2e5a] bg-[#101123] overflow-hidden transition-all duration-500 hover:border-white/15 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4)] group h-full flex flex-col">
+      {/* ── Thumbnail Image ── */}
+      <div className="relative overflow-hidden">
+        <img
+          src={project.image}
+          alt={project.name}
+          className="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-105"
+          loading="lazy"
+        />
+        {/* Gradient overlay at bottom of image */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#101123] via-transparent to-transparent opacity-60" />
       </div>
-      <div className="px-4 lg:px-8 py-3 lg:py-5 relative flex justify-between items-center gap-4 bg-white/5 border-b border-white/5">
-        <div className="flex flex-row space-x-1 lg:space-x-2 flex-shrink-0">
-          <div className="h-2 w-2 lg:h-3 lg:w-3 rounded-full bg-red-400"></div>
-          <div className="h-2 w-2 lg:h-3 lg:w-3 rounded-full bg-orange-400"></div>
-          <div className="h-2 w-2 lg:h-3 lg:w-3 rounded-full bg-green-200"></div>
+
+      {/* ── Card Body ── */}
+      <div className="flex flex-col flex-grow p-5 pt-4">
+        {/* Tags row */}
+        <div className="mb-3 flex items-center justify-between">
+          <span
+            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.12em]"
+            style={{
+              backgroundColor: catStyle.bg,
+              color: catStyle.text,
+              border: `1px solid ${catStyle.border}`,
+            }}
+          >
+            <span
+              className="h-1.5 w-1.5 rounded-full"
+              style={{ backgroundColor: catStyle.text }}
+            />
+            {project.category}
+          </span>
+
+          <span
+            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.12em]"
+            style={{
+              backgroundColor: statStyle.bg,
+              color: statStyle.text,
+              border: `1px solid ${statStyle.border}`,
+            }}
+          >
+            <span
+              className="h-1.5 w-1.5 rounded-full animate-pulse"
+              style={{ backgroundColor: statStyle.text }}
+            />
+            {project.status}
+          </span>
         </div>
-        <div className="flex-1 min-w-0">
-          {hasProjectLink ? (
-            <a
-              href={project.demo}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative z-20 block text-center text-[#16f2b3] font-medium text-base lg:text-xl hover:text-white transition-colors duration-300 truncate"
+
+        {/* Title */}
+        <h3 className="mb-2 text-base font-bold text-white leading-snug line-clamp-2">
+          {project.name}
+        </h3>
+
+        {/* Description */}
+        <p className="mb-4 text-xs leading-relaxed text-gray-400 line-clamp-3 flex-grow">
+          {project.description}
+        </p>
+
+        {/* Tech tags */}
+        <div className="mb-5 flex flex-wrap gap-1.5 items-center">
+          {visibleTech.map((t, i) => (
+            <span
+              key={i}
+              className="rounded-md border border-[#2a2e5a] bg-[#0d1224]/70 px-2.5 py-1 text-[0.6rem] font-medium text-gray-400 transition-colors duration-300 hover:border-white/15 hover:text-gray-300"
             >
-              {project.name}
-            </a>
-          ) : (
-            <p className="text-center text-[#16f2b3] font-medium text-base lg:text-xl truncate">
-              {project.name}
-            </p>
+              {t}
+            </span>
+          ))}
+          {extraCount > 0 && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setShowAllSkills(!showAllSkills);
+              }}
+              className="inline-flex items-center gap-1 rounded-md border border-[#3b82f6]/40 bg-[#3b82f6]/15 px-2.5 py-1 text-[0.6rem] font-semibold text-[#60a5fa] transition-all duration-300 hover:bg-[#3b82f6]/25 hover:border-[#3b82f6]/70 hover:text-white cursor-pointer active:scale-95"
+              aria-label={showAllSkills ? "Show fewer skills" : `Show ${extraCount} more skills`}
+            >
+              {showAllSkills ? (
+                <>
+                  <span>Show less</span>
+                  <FaChevronUp className="h-2 w-2" />
+                </>
+              ) : (
+                <>
+                  <span>+{extraCount} more</span>
+                  <FaChevronDown className="h-2 w-2" />
+                </>
+              )}
+            </button>
           )}
         </div>
-        {hasProjectLink && (
+
+        {/* Footer: View Case Study + Code */}
+        <div className="mt-auto flex items-center justify-between border-t border-[#2a2e5a]/50 pt-4">
           <a
             href={project.demo}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`Open ${project.name} on GitHub`}
-            className="relative z-20 shrink-0 p-2"
+            className="group/link inline-flex items-center gap-1.5 text-xs font-semibold text-[#16f2b3] transition-all duration-300 hover:gap-3 no-underline"
           >
-            <HiMiniArrowTopRightOnSquare className="h-7 w-7 text-gray-400 hover:text-orange-400 transition-colors duration-300" />
+            View Case Study
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-3.5 w-3.5 transition-transform duration-300 group-hover/link:translate-x-1"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
           </a>
-        )}
-      </div>
-      <div className="overflow-hidden px-4 lg:px-8 py-4 lg:py-8">
-        <code className="font-mono text-xs md:text-sm lg:text-base">
-          <div className="blink">
-            <span className="mr-2 text-pink-500">const</span>
-            <span className="mr-2 text-white">project</span>
-            <span className="mr-2 text-pink-500">=</span>
-            <span className="text-gray-400">{"{"}</span>
-          </div>
-          <div>
-            <span className="ml-4 lg:ml-8 mr-2 text-white">name:</span>
-            <span className="text-gray-400">{`'`}</span>
-            <span className="text-amber-300">{project.name}</span>
-            <span className="text-gray-400">{`',`}</span>
-          </div>
 
-          <div className="ml-4 lg:ml-8 mr-2 mt-1">
-            <span className=" text-white">tools:</span>
-            <span className="text-gray-400">{` ['`}</span>
-            {project.tools.map((tag, i) => (
-              <React.Fragment key={i}>
-                <span className="text-amber-300">{tag}</span>
-                {project.tools.length - 1 !== i && (
-                  <span className="text-gray-400">{`', '`}</span>
-                )}
-              </React.Fragment>
-            ))}
-            <span className="text-gray-400">{`"],`}</span>
-          </div>
-          <div className="mt-1">
-            <span className="ml-4 lg:ml-8 mr-2 text-white">myRole:</span>
-            <span className="text-orange-400">{project.role}</span>
-            <span className="text-gray-400">,</span>
-          </div>
-          {project.name !== "8+ Admin Panel" && (
-            <div className="ml-4 lg:ml-8 mr-2 mt-1">
-              <span className="text-white">Description:</span>
-              <span className="block whitespace-pre-line text-cyan-400">
-                {formatProjectDescription(project.description)}
-              </span>
-              <span className="text-gray-400">,</span>
-            </div>
-          )}
-          <div>
-            <span className="text-gray-400">{`};`}</span>
-          </div>
-        </code>
+          <a
+            href={project.code}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#2a2e5a] bg-[#0d1224]/60 px-3 py-1.5 text-[0.65rem] font-medium text-gray-400 transition-all duration-300 hover:border-white/15 hover:bg-white/5 hover:text-white no-underline"
+          >
+            <FaGithub className="h-3.5 w-3.5" />
+            Code
+          </a>
+        </div>
       </div>
     </div>
   );
